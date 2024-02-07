@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/qml">
+        <file>res/CustomTuningComponentCopter.qml</file>
+        <file>res/CustomTuningComponentCopterAll.qml</file>
+        <file>res/CustomTuningComponentCopterAttitude.qml</file>
+        <file>res/CustomTuningComponentCopterPosition.qml</file>
+        <file>res/CustomTuningComponentCopterRate.qml</file>
+        <file>res/CustomTuningComponentCopterVelocity.qml</file>
+    </qresource>
+</RCC>

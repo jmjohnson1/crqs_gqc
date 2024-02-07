@@ -26,8 +26,8 @@ public:
     GenericAutoPilotPlugin(Vehicle* vehicle, QObject* parent = nullptr);
     
     // Overrides from AutoPilotPlugin
-    const QVariantList& vehicleComponents(void) final;
-    QString prerequisiteSetup(VehicleComponent* component) const final;
+    const QVariantList& vehicleComponents(void) ;
+    QString prerequisiteSetup(VehicleComponent* component) const ;
 };
 
 #endif
