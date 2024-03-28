@@ -1,6 +1,5 @@
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Controls
 import QtQuick.Layouts
 
 import QGroundControl.Palette
@@ -50,8 +49,8 @@ QGCButton {
                 QGCLabel {
                     id: textLabel
                     text:                       control.text
-                    font.family:                ScreenTools.normalFontFamily
-                    font.pointSize:             control.pointSize
+                    font.family:                control.font.family
+                    font.pointSize:             control.font.pointSize
                     color:                      _showHighlight ? qgcPal.buttonHighlightText : (primary ? qgcPal.primaryButtonText : qgcPal.buttonText)
                     anchors.baseline:           iconSource !== "" ? parent.bottom : undefined
                     anchors.centerIn:           iconSource === "" ? parent : undefined   

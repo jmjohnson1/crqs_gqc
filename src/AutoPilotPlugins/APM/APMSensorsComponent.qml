@@ -10,7 +10,6 @@
 
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Controls
 import QtQuick.Dialogs
 import QtQuick.Layouts
 
@@ -383,7 +382,7 @@ SetupPage {
 
                                 Component.onCompleted: selectPriorityfromParams()
 
-                                onActivated: {
+                                onActivated: (index) => {
                                     if (index == 3) {
                                         // User cannot select Not Set
                                         selectPriorityfromParams()

@@ -10,7 +10,6 @@
 
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Controls
 
 import QGroundControl
 import QGroundControl.FactSystem
@@ -331,7 +330,7 @@ SetupPage {
                                                 textRole:       "text"
                                                 currentIndex:   gimbalOutIndex
 
-                                                onActivated: setRCFunction(gimbalOutModel.get(index).value, rcFunction)
+                                                onActivated: (index) => { setRCFunction(gimbalOutModel.get(index).value, rcFunction) }
                                             }
                                         }
 

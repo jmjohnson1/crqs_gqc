@@ -79,12 +79,10 @@ int WindowsCrtReportHook(int reportType, char* message, int* returnValue)
 
 #endif
 
-#if defined(__android__)
+#if defined(Q_OS_ANDROID)
 #include <jni.h>
 #include "AndroidInterface.h"
-#ifndef FIXME_QT6_DISABLE_ANDROID_JOYSTICK
 #include "JoystickAndroid.h"
-#endif
 #if !defined(NO_SERIAL_LINK)
 #include "qserialport.h"
 #endif
@@ -188,9 +186,7 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved)
     QSerialPort::setNativeMethods();
  #endif
 
-#ifndef FIXME_QT6_DISABLE_ANDROID_JOYSTICK
     JoystickAndroid::setNativeMethods();
-#endif
 
     return JNI_VERSION_1_6;
 }
@@ -253,7 +249,7 @@ int main(int argc, char *argv[])
     AppMessages::installHandler();
 
 #ifdef Q_OS_MAC
-#ifndef __ios__
+#ifndef Q_OS_IOS
     // Prevent Apple's app nap from screwing us over
     // tip: the domain can be cross-checked on the command line with <defaults domains>
     QProcess::execute("defaults", {"write org.qgroundcontrol.qgroundcontrol NSAppSleepDisabled -bool YES"});
@@ -349,9 +345,14 @@ int main(int argc, char *argv[])
 #endif
 #endif // QT_DEBUG
 
+#ifdef Q_OS_DARWIN
+    // Gstreamer video playback requires OpenGL
+    QQuickWindow::setGraphicsApi(QSGRendererInterface::OpenGL);
+#endif
+
+    QQuickStyle::setStyle("Basic");
     QGCApplication* app = new QGCApplication(argc, argv, runUnitTests);
     Q_CHECK_PTR(app);
-    QQuickStyle::setStyle("Basic");
     if(app->isErrorState()) {
         app->exec();
         return -1;
@@ -396,7 +397,7 @@ int main(int argc, char *argv[])
 #endif
     {
 
-#ifdef __android__
+#ifdef Q_OS_ANDROID
         AndroidInterface::checkStoragePermissions();
 #endif
         if (!app->_initForNormalAppBoot()) {

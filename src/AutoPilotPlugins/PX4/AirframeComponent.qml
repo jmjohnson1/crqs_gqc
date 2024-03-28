@@ -10,7 +10,6 @@
 
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Controls
 import QtQuick.Dialogs
 
 import QGroundControl.FactSystem
@@ -221,7 +220,7 @@ SetupPage {
                                     }
                                 }
 
-                                onActivated: {
+                                onActivated: (index) => {
                                     applyButton.primary = true
                                     airframeCheckBox.checked = true;
                                     console.log("combo change", index)

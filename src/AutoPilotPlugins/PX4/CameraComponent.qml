@@ -10,7 +10,6 @@
 
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Controls
 import QtQuick.Layouts
 
 import QGroundControl
@@ -129,7 +128,7 @@ SetupPage {
                             enabled:            !_rebooting
                             Layout.alignment:   Qt.AlignVCenter
                             Layout.minimumWidth: _editFieldWidth
-                            onActivated: {
+                            onActivated: (index) => {
                                 applyAndRestart.visible = true
                             }
                         }
@@ -144,7 +143,7 @@ SetupPage {
                             enabled:            !_rebooting && (_camTriggerInterface ? true : false)
                             Layout.alignment:   Qt.AlignVCenter
                             Layout.minimumWidth: _editFieldWidth
-                            onActivated: {
+                            onActivated: (index) => {
                                 applyAndRestart.visible = true
                             }
                         }

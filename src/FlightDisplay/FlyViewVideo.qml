@@ -15,16 +15,17 @@ import QGroundControl.Controllers
 import QGroundControl.ScreenTools
 
 Item {
-    id:         _root
-    visible:    QGroundControl.videoManager.hasVideo
+    id: _root
+
+    property Item pipView
+    property Item pipState: videoPipState
 
     property int    _track_rec_x:       0
     property int    _track_rec_y:       0
 
-    property Item pipState: videoPipState
-    QGCPipState {
+    PipState {
         id:         videoPipState
-        pipOverlay: _pipOverlay
+        pipView:    _root.pipView
         isDark:     true
 
         onWindowAboutToOpen: {
@@ -106,7 +107,7 @@ Item {
 
         onDoubleClicked: QGroundControl.videoManager.fullScreen = !QGroundControl.videoManager.fullScreen
 
-        onPressed: {
+        onPressed:(mouse) => {
             _track_rec_x = mouse.x
             _track_rec_y = mouse.y
 
@@ -120,7 +121,7 @@ Item {
                 }
             }
         }
-        onPositionChanged: {
+        onPositionChanged: (mouse) => {
             //on move, update the width of rectangle
             if (trackingROI !== null) {
                 if (mouse.x < trackingROI.x) {
@@ -137,7 +138,7 @@ Item {
                 }
             }
         }
-        onReleased: {
+        onReleased: (mouse) => {
             //if there is already a selection, delete it
             if (trackingROI !== null) {
                 trackingROI.destroy();

@@ -16,6 +16,7 @@
 
 #include <QObject>
 #include <QVariantList>
+#include <QFile>
 
 /// @file
 /// @brief Core Plugin Interface for QGroundControl
@@ -35,7 +36,7 @@ class VideoReceiver;
 class VideoSink;
 class PlanMasterController;
 class QGCCameraManager;
-class QGCCameraControl;
+class MavlinkCameraControl;
 class QQuickItem;
 
 Q_MOC_INCLUDE("QGCOptions.h")
@@ -175,6 +176,9 @@ public:
     /// @return A list of QUrl with the indicators
     virtual const QVariantList& toolBarIndicators(void);
 
+    /// Returns a true if xml definition file of a providen camera name exists, and loads it to file argument, to allow definition files to be loaded from resources
+    virtual bool getOfflineCameraDefinitionFile(QString cameraname, QFile& file) { Q_UNUSED(cameraname); Q_UNUSED(file); return false; }
+
     /// Returns the list of first run prompt ids which need to be displayed according to current settings
     Q_INVOKABLE QVariantList firstRunPromptsToShow(void);
 
@@ -194,19 +198,18 @@ public:
     static const int firstRunPromptIdsFirstCustomId = 10000;
 
 signals:
-    void settingsPagesChanged       ();
     void analyzePagesChanged        ();
     void showTouchAreasChanged      (bool showTouchAreas);
     void showAdvancedUIChanged      (bool showAdvancedUI);
     void toolBarIndicatorsChanged   ();
 
 protected:
-    bool                _showTouchAreas;
-    bool                _showAdvancedUI;
-    Vehicle*            _activeVehicle  = nullptr;
-    QGCCameraManager*   _cameraManager  = nullptr;
-    QGCCameraControl*   _currentCamera  = nullptr;
-    QVariantList        _toolBarIndicatorList;
+    bool                    _showTouchAreas;
+    bool                    _showAdvancedUI;
+    Vehicle*                _activeVehicle  = nullptr;
+    QGCCameraManager*       _cameraManager  = nullptr;
+    MavlinkCameraControl*  _currentCamera  = nullptr;
+    QVariantList            _toolBarIndicatorList;
 
 private:
     QGCCorePlugin_p*    _p;

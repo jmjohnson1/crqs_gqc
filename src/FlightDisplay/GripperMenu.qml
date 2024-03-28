@@ -1,7 +1,6 @@
 
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Controls
 import QtQuick.Dialogs
 import QtLocation
 import QtPositioning
@@ -37,7 +36,7 @@ QGCPopupDialog {
             id: grabButton
             text:                   "Grab"
             iconSource:             "/res/GripperGrab.svg"
-            pointSize:              ScreenTools.defaultFontPointSize * 3.5
+            font.pointSize:         ScreenTools.defaultFontPointSize * 3.5
             backRadius:             width / 40
             heightFactor:           0.75
             Layout.preferredHeight: releaseButton.height
@@ -53,7 +52,7 @@ QGCPopupDialog {
             id: releaseButton
             text:                   "Release"
             iconSource:             "/res/GripperRelease.svg"
-            pointSize:              ScreenTools.defaultFontPointSize * 3.5
+            font.pointSize:         ScreenTools.defaultFontPointSize * 3.5
             backRadius:             width / 40
             heightFactor:           0.75
             Layout.preferredWidth:  ScreenTools.defaultFontPixelWidth * 27

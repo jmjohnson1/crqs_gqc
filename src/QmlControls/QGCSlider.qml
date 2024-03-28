@@ -9,8 +9,6 @@
 
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Controls
-import QtQuick.Controls
 
 import QGroundControl.Palette
 import QGroundControl.ScreenTools
@@ -89,7 +87,7 @@ Slider {
         border.width:   1
         radius:         _radius
 
-        property real _radius: ScreenTools.defaultFontPixelHeight / 2
+        property real _radius: ScreenTools.isMobile ? ScreenTools.minTouchPixels / 2 : ScreenTools.defaultFontPixelHeight / 2
 
         Label {
             text:               control.value.toFixed( control.to <= 1 ? 1 : 0)

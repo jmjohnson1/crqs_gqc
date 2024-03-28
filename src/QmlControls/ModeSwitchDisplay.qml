@@ -10,7 +10,6 @@
 
 import QtQuick
 import QtQuick.Controls
-import QtQuick.Controls
 
 import QGroundControl.Palette
 import QGroundControl.ScreenTools
@@ -73,7 +72,7 @@ Rectangle {
                     currentIndex:   modeChannelIndex
                     enabled:        modeChannelEnabled
 
-                    onActivated: modeChannelIndexSelected(index)
+                    onActivated: (index) =>  { modeChannelIndexSelected(index) }
                 }
 
                 QGCLabel {

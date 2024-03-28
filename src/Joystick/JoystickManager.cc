@@ -10,6 +10,7 @@
 
 #include "JoystickManager.h"
 #include "QGCApplication.h"
+#include "QGCLoggingCategory.h"
 
 #include <QQmlEngine>
 
@@ -18,10 +19,8 @@
     #define __sdljoystick__
 #endif
 
-#ifndef FIXME_QT6_DISABLE_ANDROID_JOYSTICK
-#ifdef __android__
+#ifdef Q_OS_ANDROID
     #include "JoystickAndroid.h"
-#endif
 #endif
 
 QGC_LOGGING_CATEGORY(JoystickManagerLog, "JoystickManagerLog")
@@ -61,13 +60,11 @@ void JoystickManager::init() {
         return;
     }
     _setActiveJoystickFromSettings();
-#elif defined(__android__)
-#ifndef FIXME_QT6_DISABLE_ANDROID_JOYSTICK
+#elif defined(Q_OS_ANDROID)
     if (!JoystickAndroid::init(this)) {
         return;
     }
     connect(this, &JoystickManager::updateAvailableJoysticksSignal, this, &JoystickManager::restartJoystickCheckTimer);
-#endif
 #endif
     connect(&_joystickCheckTimer, &QTimer::timeout, this, &JoystickManager::_updateAvailableJoysticks);
     _joystickCheckTimerCounter = 5;
@@ -81,10 +78,8 @@ void JoystickManager::_setActiveJoystickFromSettings(void)
 #ifdef __sdljoystick__
     // Get the latest joystick mapping
     newMap = JoystickSDL::discover(_multiVehicleManager);
-#elif defined(__android__)
-#ifndef FIXME_QT6_DISABLE_ANDROID_JOYSTICK
+#elif defined(Q_OS_ANDROID)
     newMap = JoystickAndroid::discover(_multiVehicleManager);
-#endif
 #endif
 
     if (_activeJoystick && !newMap.contains(_activeJoystick->name())) {
@@ -216,7 +211,7 @@ void JoystickManager::_updateAvailableJoysticks()
             break;
         }
     }
-#elif defined(__android__)
+#elif defined(Q_OS_ANDROID)
     _joystickCheckTimerCounter--;
     _setActiveJoystickFromSettings();
     if (_joystickCheckTimerCounter <= 0) {
