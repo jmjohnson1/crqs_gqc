@@ -20630,6 +20630,69 @@
       "default": 0.1,
       "group": "Miscellaneous",
       "shortDesc": "RV_YAW_P"
-    }
+    },
+    {
+      "name": "KP_PITCH",
+      "type": "Float",
+      "default": 0.1,
+      "group": "PID",
+      "shortDesc": "KP_PITCH"
+    },
+    {
+      "name": "KP_ROLL",
+      "type": "Float",
+      "default": 0.1,
+      "group": "PID",
+      "shortDesc": "KP_ROLL"
+    },
+    {
+      "name": "KP_YAW",
+      "type": "Float",
+      "default": 0.1,
+      "group": "PID",
+      "shortDesc": "KP_YAW"
+    },
+    {
+      "name": "KI_PITCH",
+      "type": "Float",
+      "default": 0.1,
+      "group": "PID",
+      "shortDesc": "KI_PITCH"
+    },
+    {
+      "name": "KI_ROLL",
+      "type": "Float",
+      "default": 0.1,
+      "group": "PID",
+      "shortDesc": "KI_ROLL"
+    },
+    {
+      "name": "KI_YAW",
+      "type": "Float",
+      "default": 0.1,
+      "group": "PID",
+      "shortDesc": "KI_YAW"
+    },
+    {
+      "name": "KD_PITCH",
+      "type": "Float",
+      "default": 0.1,
+      "group": "PID",
+      "shortDesc": "KD_PITCH"
+    },
+    {
+      "name": "KD_ROLL",
+      "type": "Float",
+      "default": 0.1,
+      "group": "PID",
+      "shortDesc": "KD_ROLL"
+    },
+    {
+      "name": "KD_YAW",
+      "type": "Float",
+      "default": 0.1,
+      "group": "PID",
+      "shortDesc": "KD_YAW"
+    },
   ]
 }

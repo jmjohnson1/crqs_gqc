@@ -23,6 +23,7 @@ public:
     CustomAutoPilotPlugin(Vehicle* vehicle, QObject* parent);
 
     const QVariantList& vehicleComponents(void) override;
+//    QString prerequisiteSetup(VehicleComponent* component) const override;
 
 protected:
     CustomTuningComponent*     _tuningComponent;

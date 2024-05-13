@@ -75,6 +75,7 @@ QUrl PX4TuningComponent::setupSource(void) const
             break;
     }
 
+        qDebug() << QUrl::fromUserInput(qmlFile);
     return QUrl::fromUserInput(qmlFile);
 }
 
