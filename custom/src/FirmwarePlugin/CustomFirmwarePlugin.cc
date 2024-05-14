@@ -26,3 +26,31 @@ AutoPilotPlugin* CustomFirmwarePlugin::autopilotPlugin(Vehicle* vehicle)
   qDebug() << "Function called: CustomFirmwarePlugin::autopilotPlugin";
     return new CustomAutoPilotPlugin(vehicle, vehicle);
 }
+
+bool CustomFirmwarePlugin::isCapable(const Vehicle *vehicle, FirmwareCapabilities capabilities){
+    // We say what's available. It checks this set of flags against capability queried
+    int available = SetFlightModeCapability | GuidedModeCapability | TakeoffVehicleCapability;
+    return (available & capabilities) == capabilities;
+}
+
+QString CustomFirmwarePlugin::flightMode(uint8_t base_mode, uint32_t custom_mode) const {
+    QString name;
+    switch(custom_mode) {
+    case customFlightModes::MANUAL:
+        name = customFlightModeNames[0];
+        break;
+    case customFlightModes::ALTITUDE:
+        name = customFlightModeNames[1];
+        break;
+    case customFlightModes::POSITION:
+        name = customFlightModeNames[2];
+        break;
+    case customFlightModes::MISSION:
+        name = customFlightModeNames[3];
+        break;
+    default:
+        name = QString(tr("Invalid"));
+        break;
+    }
+    return name;
+}
