@@ -32,15 +32,15 @@ AutoPilotPlugin* CustomFirmwarePlugin::autopilotPlugin(Vehicle* vehicle)
     };
 
     static const struct Mode2Name rgModes2Name[] = {
-        { MAV_MODE_FLAG_MANUAL_INPUT_ENABLED, 0,    	&manualModeName },
-        { MAV_MODE_FLAG_STABILIZE_ENABLED,    0,    	&stabilizeModeName },
-        { MAV_MODE_FLAG_GUIDED_ENABLED,       MISSION,  &missionModeName },
-        { MAV_MODE_FLAG_GUIDED_ENABLED,       POSITION, &posModeName },
-        { MAV_MODE_FLAG_GUIDED_ENABLED,       ALTITUDE, &altModeName },
-        { MAV_MODE_FLAG_GUIDED_ENABLED,       LANDING, 	&landingModeName },
-        { MAV_MODE_FLAG_GUIDED_ENABLED,       TAKEOFF, 	&takeoffModeName },
-        { MAV_MODE_FLAG_AUTO_ENABLED,         0,    	&autoModeName },
-        { MAV_MODE_FLAG_TEST_ENABLED,         0,    	&testModeName },
+        { MAV_MODE_FLAG_CUSTOM_MODE_ENABLED,      0,    	&manualModeName },
+        { MAV_MODE_FLAG_CUSTOM_MODE_ENABLED,          0,    	&stabilizeModeName },
+        { MAV_MODE_FLAG_CUSTOM_MODE_ENABLED,       MISSION,  &missionModeName },
+        { MAV_MODE_FLAG_CUSTOM_MODE_ENABLED,       POSITION, &posModeName },
+        { MAV_MODE_FLAG_CUSTOM_MODE_ENABLED,       ALTITUDE, &altModeName },
+        { MAV_MODE_FLAG_CUSTOM_MODE_ENABLED,       LANDING, 	&landingModeName },
+        { MAV_MODE_FLAG_CUSTOM_MODE_ENABLED,       TAKEOFF, 	&takeoffModeName },
+        { MAV_MODE_FLAG_CUSTOM_MODE_ENABLED,         0,    	&autoModeName },
+        { MAV_MODE_FLAG_CUSTOM_MODE_ENABLED,         0,    	&testModeName },
     };
 
     // Convert static information to dynamic list. This allows for plugin override class to manipulate list.
@@ -78,11 +78,9 @@ QStringList CustomFirmwarePlugin::flightModes(Vehicle*) {
 
 QString CustomFirmwarePlugin::flightMode(uint8_t base_mode, uint32_t custom_mode) const {
     QString flightMode = "Unknown";
-    if (base_mode & MAV_MODE_FLAG_CUSTOM_MODE_ENABLED) {
-
         bool found = false;
         foreach (const FlightModeInfo_t& info, _flightModeInfoList) {
-          if ((info.main_mode & base_mode) && (info.custom_mode & custom_mode)) {
+          if ((info.main_mode == base_mode) && (info.custom_mode == custom_mode)) {
                 flightMode = *info.name;
                 found = true;
                 break;
@@ -93,7 +91,6 @@ QString CustomFirmwarePlugin::flightMode(uint8_t base_mode, uint32_t custom_mode
             qWarning() << "Unknown flight mode" << custom_mode;
             return tr("Unknown %1:%2").arg(base_mode).arg(custom_mode);
         }
-    }
     return flightMode;
 }
 

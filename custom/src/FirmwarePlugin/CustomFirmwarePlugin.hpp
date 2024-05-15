@@ -90,20 +90,14 @@ public:
 
 protected:
     enum CustomFlightModeBits {
-        ALTITUDE = 1 << 1,
-        POSITION = 1 << 2,
-        MISSION = 1 << 3,
-        TAKEOFF = 1 << 4,
-        LANDING = 1 << 5,
+        MANUAL,
+        ALTITUDE,
+        POSITION,
+        MISSION,
+        TAKEOFF,
+        LANDING,
     };
-  enum CustomFlightModes {
-      ALT_TAKEOFF = ALTITUDE | TAKEOFF,
-      ALT_LAND = ALTITUDE | LANDING,
-      POS_TAKEOFF = POSITION | TAKEOFF,
-      POS_LAND = POSITION | TAKEOFF,
-      MISSION_TAKEOFF = MISSION | TAKEOFF,
-      MISSION_LAND = MISSION | LANDING,
-    };
+
 
     typedef struct {
         uint8_t         main_mode;
