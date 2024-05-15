@@ -12,7 +12,7 @@
  */
 
 #include "CustomFirmwarePluginFactory.h"
-#include "CustomFirmwarePlugin.h"
+#include "CustomFirmwarePlugin.hpp"
 
 CustomFirmwarePluginFactory CustomFirmwarePluginFactoryImp;
 

@@ -67,7 +67,7 @@ INCLUDEPATH += \
 HEADERS+= \
     $$PWD/src/AutoPilotPlugin/CustomAutoPilotPlugin.h \
     $$PWD/src/AutoPilotPlugin/CustomTuningComponent.h \
-    $$PWD/src/FirmwarePlugin/CustomFirmwarePlugin.h \
+    $$PWD/src/FirmwarePlugin/CustomFirmwarePlugin.hpp \
     $$PWD/src/FirmwarePlugin/CustomFirmwarePluginFactory.h \
 
 SOURCES += \
