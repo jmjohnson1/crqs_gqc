@@ -127,7 +127,7 @@ ColumnLayout {
             }
         }
         title: "Attitude"
-        tuningMode: Vehicle.ModeDisabled
+        tuningMode: Vehicle.ModeRateAndAttitude
         unit: "deg"
         axis: [ roll, pitch, yaw ]
         showAutoModeChange: false

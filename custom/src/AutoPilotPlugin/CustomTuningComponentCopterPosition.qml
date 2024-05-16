@@ -68,7 +68,7 @@ ColumnLayout {
             }
         }
         title: "Position"
-        tuningMode: Vehicle.ModeDisabled
+        tuningMode: Vehicle.ModeVelocityAndPosition
         unit: "m"
         axis: [ horizontal, vertical ]
         chartDisplaySec: 50
