@@ -161,3 +161,10 @@ void CustomFirmwarePlugin::startMission(Vehicle* vehicle) {
         qgcApp()->showAppMessage(tr("Unable to start mission: Vehicle not changing to %1 flight mode.").arg(missionFlightMode()));
     }
 }
+
+void CustomFirmwarePlugin::guidedModeChangeAltitude(Vehicle* vehicle, double altitudeChange, bool pauseVehicle) {
+    qDebug() << "rawVal: ";
+    qDebug() << (vehicle->altitudeAMSL()->rawValue()).toDouble();
+    qDebug() << "cookedVal: ";
+    qDebug() << vehicle->altitudeAMSL()->cookedValue().toDouble();
+}

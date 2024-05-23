@@ -83,7 +83,7 @@ public:
 //    /// Command vehicle to change altitude
 //    ///     @param altitudeChange If > 0, go up by amount specified, if < 0, go down by amount specified
 //    ///     @param pauseVehicle true: pause vehicle prior to altitude change
-//    virtual void guidedModeChangeAltitude(Vehicle* vehicle, double altitudeChange, bool pauseVehicle);
+    void guidedModeChangeAltitude(Vehicle* vehicle, double altitudeChange, bool pauseVehicle) override;
 
 //    /// List of supported mission commands. Empty list for all commands supported.
 //    virtual QList<MAV_CMD> supportedMissionCommands(QGCMAVLink::VehicleClass_t vehicleClass);

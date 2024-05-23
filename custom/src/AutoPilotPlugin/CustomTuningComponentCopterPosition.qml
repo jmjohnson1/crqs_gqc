@@ -23,8 +23,7 @@ ColumnLayout {
     property real _availableWidth:  availableWidth
 
     GridLayout {
-        columns: 2
-
+        columns: 3
     }
 
     PIDTuning {
@@ -66,13 +65,28 @@ ColumnLayout {
                     step:           0.05
                 }
             }
+
         }
         title: "Position"
         tuningMode: Vehicle.ModeVelocityAndPosition
         unit: "m"
         axis: [ horizontal, vertical ]
         chartDisplaySec: 50
+
+        QGCButton {
+            text:       qsTr("Step")
+            onClicked: globals.activeVehicle.guidedModeChangeAltitude(0, false);
+        }
+        QGCButton {
+            text:       qsTr("Takeoff")
+            onClicked:  globals.activeVehicle.guidedModeTakeoff(0)
+        }
+        QGCButton {
+            text:       qsTr("Land")
+            onClicked: globals.activeVehicle.guidedModeLand()
+        }
     }
+
 }
 
 
