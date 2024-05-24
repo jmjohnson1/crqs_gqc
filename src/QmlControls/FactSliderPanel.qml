@@ -130,7 +130,6 @@ Column {
                             text: slider.from
                             horizontalAlignment: Text.AlignLeft
                         }
-                        Item {
                             QGCLabel {
                                 visible: slider.value != slider.from && slider.value != slider.to
                                 text: Math.round(slider._fact.value*100000)/100000
@@ -143,10 +142,11 @@ Column {
                                     if (x < minX) x = minX
                                     var maxX = rightValueLabel.x - _margins/2 - width
                                     if (x > maxX) x = maxX
+                                    console.log("right: ", rightValueLabel.x, " x: ", x);
                                     return x
                                 }
                             }
-                        }
+
                         QGCLabel {
                             id: rightValueLabel
                             text: slider.to
