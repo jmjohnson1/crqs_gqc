@@ -135,6 +135,7 @@ Item {
             mapControl:             _mapControl
             visible:                !QGroundControl.videoManager.fullScreen
             utmspActTrigger:        utmspSendActTrigger
+            isViewer3DOpen:         viewer3DWindow.isOpen
         }
 
         FlyViewCustomLayer {
@@ -182,8 +183,6 @@ Item {
             anchors.top:        parent.top
             anchors.bottom:     parent.bottom
             z:                  QGroundControl.zOrderTopMost
-            radius:             ScreenTools.defaultFontPixelWidth / 2
-            color:              qgcPal.window
             visible:            false
         }
 

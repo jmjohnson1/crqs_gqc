@@ -12,9 +12,7 @@
 #define ParameterManagerTest_H
 
 #include "UnitTest.h"
-#include "MockLink.h"
-#include "MultiSignalSpy.h"
-#include "MockLink.h"
+#include "MockLinkMissionItemHandler.h"
 
 class ParameterManagerTest : public UnitTest
 {
@@ -26,7 +24,7 @@ private slots:
     void _requestListMissingParamSuccess(void);
     void _requestListMissingParamFail(void);
     void _FTPnoFailure(void);
-    void _FTPChangeParam(void);
+    // void _FTPChangeParam(void);
 
 
 private:

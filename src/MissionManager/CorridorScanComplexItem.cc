@@ -9,22 +9,17 @@
 
 #include "CorridorScanComplexItem.h"
 #include "JsonHelper.h"
-#include "MissionController.h"
 #include "SettingsManager.h"
 #include "AppSettings.h"
 #include "PlanMasterController.h"
 #include "QGCApplication.h"
 #include "QGCLoggingCategory.h"
 
+#include <QtCore/QJsonArray>
+
 QGC_LOGGING_CATEGORY(CorridorScanComplexItemLog, "CorridorScanComplexItemLog")
 
 const QString CorridorScanComplexItem::name(CorridorScanComplexItem::tr("Corridor Scan"));
-
-const char* CorridorScanComplexItem::settingsGroup =            "CorridorScan";
-const char* CorridorScanComplexItem::corridorWidthName =        "CorridorWidth";
-const char* CorridorScanComplexItem::_jsonEntryPointKey =       "EntryPoint";
-
-const char* CorridorScanComplexItem::jsonComplexItemTypeValue = "CorridorScan";
 
 CorridorScanComplexItem::CorridorScanComplexItem(PlanMasterController* masterController, bool flyView, const QString& kmlFile)
     : TransectStyleComplexItem  (masterController, flyView, settingsGroup)

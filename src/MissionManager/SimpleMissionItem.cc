@@ -7,11 +7,7 @@
  *
  ****************************************************************************/
 
-
-#include <QStringList>
-
 #include "SimpleMissionItem.h"
-#include "FirmwarePluginManager.h"
 #include "QGCApplication.h"
 #include "JsonHelper.h"
 #include "MissionCommandTree.h"
@@ -19,7 +15,14 @@
 #include "QGroundControlQmlGlobal.h"
 #include "SettingsManager.h"
 #include "PlanMasterController.h"
+#include "SpeedSection.h"
+#include "MultiVehicleManager.h"
+#include "CameraSection.h"
+#include "Vehicle.h"
 #include "QGC.h"
+
+#include <QtCore/QStringList>
+#include <QtCore/QJsonArray>
 
 FactMetaData* SimpleMissionItem::_altitudeMetaData =        nullptr;
 FactMetaData* SimpleMissionItem::_commandMetaData =         nullptr;
@@ -27,30 +30,6 @@ FactMetaData* SimpleMissionItem::_defaultParamMetaData =    nullptr;
 FactMetaData* SimpleMissionItem::_frameMetaData =           nullptr;
 FactMetaData* SimpleMissionItem::_latitudeMetaData =        nullptr;
 FactMetaData* SimpleMissionItem::_longitudeMetaData =       nullptr;
-
-const char* SimpleMissionItem::_jsonAltitudeModeKey =           "AltitudeMode";
-const char* SimpleMissionItem::_jsonAltitudeKey =               "Altitude";
-const char* SimpleMissionItem::_jsonAMSLAltAboveTerrainKey =    "AMSLAltAboveTerrain";
-
-struct EnumInfo_s {
-    const char *    label;
-    MAV_FRAME       frame;
-};
-
-static const struct EnumInfo_s _rgMavFrameInfo[] = {
-{ "MAV_FRAME_GLOBAL",                   MAV_FRAME_GLOBAL },
-{ "MAV_FRAME_LOCAL_NED",                MAV_FRAME_LOCAL_NED },
-{ "MAV_FRAME_MISSION",                  MAV_FRAME_MISSION },
-{ "MAV_FRAME_GLOBAL_RELATIVE_ALT",      MAV_FRAME_GLOBAL_RELATIVE_ALT },
-{ "MAV_FRAME_LOCAL_ENU",                MAV_FRAME_LOCAL_ENU },
-{ "MAV_FRAME_GLOBAL_INT",               MAV_FRAME_GLOBAL_INT },
-{ "MAV_FRAME_GLOBAL_RELATIVE_ALT_INT",  MAV_FRAME_GLOBAL_RELATIVE_ALT_INT },
-{ "MAV_FRAME_LOCAL_OFFSET_NED",         MAV_FRAME_LOCAL_OFFSET_NED },
-{ "MAV_FRAME_BODY_NED",                 MAV_FRAME_BODY_NED },
-{ "MAV_FRAME_BODY_OFFSET_NED",          MAV_FRAME_BODY_OFFSET_NED },
-{ "MAV_FRAME_GLOBAL_TERRAIN_ALT",       MAV_FRAME_GLOBAL_TERRAIN_ALT },
-{ "MAV_FRAME_GLOBAL_TERRAIN_ALT_INT",   MAV_FRAME_GLOBAL_TERRAIN_ALT_INT },
-};
 
 SimpleMissionItem::SimpleMissionItem(PlanMasterController* masterController, bool flyView, bool forLoad)
     : VisualMissionItem                 (masterController, flyView)

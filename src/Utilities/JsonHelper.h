@@ -9,15 +9,16 @@
 
 #pragma once
 
-#include <QJsonObject>
-#include <QVariantList>
-#include <QGeoCoordinate>
-#include <QCoreApplication>
+#include <QtCore/QJsonObject>
+#include <QtCore/QVariantList>
+#include <QtCore/QCoreApplication>
+#include <QtPositioning/QGeoCoordinate>
 
 /// @file
 /// @author Don Gagne <don@thegagnes.com>
 
 class QmlObjectListModel;
+class QTranslator;
 
 /// @brief Json manipulation helper class.
 /// Primarily used for parsing and processing Fact metadata.
@@ -26,6 +27,8 @@ class JsonHelper
     Q_DECLARE_TR_FUNCTIONS(JsonHelper)
 
 public:
+    static QTranslator* translator();
+
     /// Determines is the specified file is a json file
     /// @return true: file is json, false: file is not json
     static bool isJsonFile(const QString&       fileName,       ///< filename
@@ -158,10 +161,10 @@ public:
     /// Returns NaN if the value is null, or if not, the double value
     static double possibleNaNJsonValue(const QJsonValue& value);
 
-    static const char* jsonVersionKey;
-    static const char* jsonGroundStationKey;
-    static const char* jsonGroundStationValue;
-    static const char* jsonFileTypeKey;
+    static constexpr const char* jsonVersionKey                      = "version";
+    static constexpr const char* jsonGroundStationKey                = "groundStation";
+    static constexpr const char* jsonGroundStationValue              = "QGroundControl";
+    static constexpr const char* jsonFileTypeKey                     = "fileType";
 
 private:
     static QString _jsonValueTypeToString(QJsonValue::Type type);
@@ -179,6 +182,6 @@ private:
     static QJsonObject _translateObject(QJsonObject& jsonObject, const QString& translateContext, const QStringList& translateKeys);
     static QJsonArray _translateArray(QJsonArray& jsonArray, const QString& translateContext, const QStringList& translateKeys);
 
-    static const char*  _translateKeysKey;
-    static const char*  _arrayIDKeysKey;
+    static constexpr const char* _translateKeysKey                   = "translateKeys";
+    static constexpr const char* _arrayIDKeysKey                     = "_arrayIDKeys";
 };

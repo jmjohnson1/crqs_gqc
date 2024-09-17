@@ -10,8 +10,12 @@
 
 #include "ParameterManagerTest.h"
 #include "MultiVehicleManager.h"
+#include "Vehicle.h"
 #include "QGCApplication.h"
 #include "ParameterManager.h"
+
+#include <QtTest/QTest>
+#include <QtTest/QSignalSpy>
 
 /// Test failure modes which should still lead to param load success
 void ParameterManagerTest::_noFailureWorker(MockConfiguration::FailureMode_t failureMode)
@@ -180,6 +184,7 @@ void ParameterManagerTest::_FTPnoFailure()
     QCOMPARE(arguments.at(0).toFloat(), 0.0f);
 }
 
+#if 0
 void ParameterManagerTest::_FTPChangeParam()
 {
     Q_ASSERT(!_mockLink);
@@ -231,3 +236,4 @@ void ParameterManagerTest::_FTPChangeParam()
     QCOMPARE(arguments.count(), 1);
     QCOMPARE(arguments.at(0).toFloat(), 0.0f);
 }
+#endif

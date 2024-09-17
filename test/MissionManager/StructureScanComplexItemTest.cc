@@ -8,8 +8,12 @@
  ****************************************************************************/
 
 #include "StructureScanComplexItemTest.h"
-#include "QGCApplication.h"
 #include "PlanMasterController.h"
+#include "MultiSignalSpy.h"
+#include "StructureScanComplexItem.h"
+#include "PlanMasterController.h"
+
+#include <QtCore/QJsonArray>
 
 StructureScanComplexItemTest::StructureScanComplexItemTest(void)
 {

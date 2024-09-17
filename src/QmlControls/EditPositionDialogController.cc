@@ -10,14 +10,9 @@
 #include "EditPositionDialogController.h"
 #include "QGCGeo.h"
 #include "QGCApplication.h"
-
-const char*  EditPositionDialogController::_latitudeFactName =      "Latitude";
-const char*  EditPositionDialogController::_longitudeFactName =     "Longitude";
-const char*  EditPositionDialogController::_zoneFactName =          "Zone";
-const char*  EditPositionDialogController::_hemisphereFactName =    "Hemisphere";
-const char*  EditPositionDialogController::_eastingFactName =       "Easting";
-const char*  EditPositionDialogController::_northingFactName =      "Northing";
-const char*  EditPositionDialogController::_mgrsFactName =          "MGRS";
+#include "QGCToolbox.h"
+#include "MultiVehicleManager.h"
+#include "Vehicle.h"
 
 QMap<QString, FactMetaData*> EditPositionDialogController::_metaDataMap;
 
@@ -57,14 +52,14 @@ void EditPositionDialogController::initValues(void)
     _longitudeFact.setRawValue(_coordinate.longitude());
 
     double easting, northing;
-    int zone = convertGeoToUTM(_coordinate, easting, northing);
+    int zone = QGCGeo::convertGeoToUTM(_coordinate, easting, northing);
     if (zone >= 1 && zone <= 60) {
         _zoneFact.setRawValue(zone);
         _hemisphereFact.setRawValue(_coordinate.latitude() < 0);
         _eastingFact.setRawValue(easting);
         _northingFact.setRawValue(northing);
     }
-    QString mgrs = convertGeoToMGRS(_coordinate);
+    QString mgrs = QGCGeo::convertGeoToMGRS(_coordinate);
     if (!mgrs.isEmpty()) {
         _mgrsFact.setRawValue(mgrs);
     }
@@ -80,7 +75,7 @@ void EditPositionDialogController::setFromGeo(void)
 void EditPositionDialogController::setFromUTM(void)
 {
     qDebug() << _eastingFact.rawValue().toDouble() << _northingFact.rawValue().toDouble() << _zoneFact.rawValue().toInt() << (_hemisphereFact.rawValue().toInt() == 1);
-    if (convertUTMToGeo(_eastingFact.rawValue().toDouble(), _northingFact.rawValue().toDouble(), _zoneFact.rawValue().toInt(), _hemisphereFact.rawValue().toInt() == 1, _coordinate)) {
+    if (QGCGeo::convertUTMToGeo(_eastingFact.rawValue().toDouble(), _northingFact.rawValue().toDouble(), _zoneFact.rawValue().toInt(), _hemisphereFact.rawValue().toInt() == 1, _coordinate)) {
         qDebug() << _eastingFact.rawValue().toDouble() << _northingFact.rawValue().toDouble() << _zoneFact.rawValue().toInt() << (_hemisphereFact.rawValue().toInt() == 1) << _coordinate;
         emit coordinateChanged(_coordinate);
     } else {
@@ -90,7 +85,7 @@ void EditPositionDialogController::setFromUTM(void)
 
 void EditPositionDialogController::setFromMGRS(void)
 {
-    if (convertMGRSToGeo(_mgrsFact.rawValue().toString(), _coordinate)) {
+    if (QGCGeo::convertMGRSToGeo(_mgrsFact.rawValue().toString(), _coordinate)) {
         emit coordinateChanged(_coordinate);
     } else {
         initValues();

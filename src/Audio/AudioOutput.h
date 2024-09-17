@@ -9,32 +9,83 @@
 
 #pragma once
 
-#include <QStringList>
-#include <QTextToSpeech>
+#include <QtCore/QLoggingCategory>
+#include <QtCore/QObject>
 
-#include "QGCToolbox.h"
+class QTextToSpeech;
+class Fact;
 
-class QGCApplication;
+Q_DECLARE_LOGGING_CATEGORY(AudioOutputLog)
 
-/// Text to Speech Interface
-class AudioOutput : public QGCTool
+/// The AudioOutput class provides functionality for audio output using text-to-speech.
+class AudioOutput : public QObject
 {
     Q_OBJECT
+
+    Q_PROPERTY(bool muted READ isMuted WRITE setMuted NOTIFY mutedChanged)
+
 public:
-    AudioOutput(QGCApplication* app, QGCToolbox* toolbox);
+    /// Enumeration for text modification options.
+    enum class TextMod {
+        None = 0,
+        Translate = 1 << 0,
+    };
+    Q_FLAG(TextMod)
+    Q_DECLARE_FLAGS(TextMods, TextMod)
 
-    static bool     getMillisecondString    (const QString& string, QString& match, int& number);
-    static QString  fixTextMessageForAudio  (const QString& string);
+    /// Constructs an AudioOutput object.
+    ///     @param parent The parent QObject.
+    explicit AudioOutput(QObject *parent = nullptr);
 
-public slots:
-    /// Convert string to speech output and say it
-    void            say                     (const QString& text);
+    /// Destructor for the AudioOutput class.
+    ~AudioOutput();
 
-private slots:
-    void            _stateChanged           (QTextToSpeech::State state);
+    /// Gets the singleton instance of AudioOutput.
+    ///     @return The singleton instance.
+    static AudioOutput *instance();
 
-protected:
-    QTextToSpeech*  _tts;
-    QStringList     _texts;
+    /// Initialize the Singleton
+    void init(Fact *mutedFact);
+
+    /// Checks if the audio output is muted.
+    ///     @return True if muted, false otherwise.
+    bool isMuted() const { return _muted; }
+
+    /// Sets the mute state of the audio output.
+    ///     @param enable True to mute, false to unmute.
+    void setMuted(bool muted) { if (muted != _muted) { _muted = muted; emit mutedChanged(_muted); } }
+
+    /// Reads the specified text with optional text modifications.
+    ///     @param text The text to be read.
+    ///     @param textMods The text modifications to apply.
+    void say(const QString &text, AudioOutput::TextMods textMods = TextMod::None);
+
+    /// Extracts a millisecond value from the given string.
+    ///     @param string The string to extract from.
+    ///     @param match The extracted millisecond string.
+    ///     @param number The extracted number.
+    ///     @return True if extraction is successful, false otherwise.
+    static bool getMillisecondString(const QString &string, QString &match, int &number);
+
+    /// Fixes text messages for audio output.
+    ///     @param string The text message to fix.
+    ///     @return The fixed text message.
+    static QString fixTextMessageForAudio(const QString &string);
+
+signals:
+    /// Emitted when the mute state changes.
+    ///     @param muted The new mute state.
+    void mutedChanged(bool muted);
+
+private:
+    QTextToSpeech *_engine = nullptr;
+    qsizetype _textQueueSize = 0;
+    bool _muted = false;
+    Fact *_mutedFact = nullptr;
+
+    static const QHash<QString, QString> _textHash;
+
+    static constexpr qsizetype kMaxTextQueueSize = 20;
+
 };
-
+Q_DECLARE_OPERATORS_FOR_FLAGS(AudioOutput::TextMods)

@@ -10,28 +10,19 @@
 #include "StructureScanComplexItem.h"
 #include "JsonHelper.h"
 #include "MissionController.h"
-#include "QGroundControlQmlGlobal.h"
+#include "QGCApplication.h"
 #include "SettingsManager.h"
 #include "AppSettings.h"
-#include "QGCLoggingCategory.h"
 #include "PlanMasterController.h"
 #include "FlightPathSegment.h"
 #include "QGC.h"
+#include "QGCLoggingCategory.h"
+
+#include <QtCore/QJsonArray>
 
 QGC_LOGGING_CATEGORY(StructureScanComplexItemLog, "StructureScanComplexItemLog")
 
 const QString StructureScanComplexItem::name(StructureScanComplexItem::tr("Structure Scan"));
-
-const char* StructureScanComplexItem::settingsGroup =               "StructureScan";
-const char* StructureScanComplexItem::_entranceAltName =            "EntranceAltitude";
-const char* StructureScanComplexItem::scanBottomAltName =           "ScanBottomAlt";
-const char* StructureScanComplexItem::structureHeightName =         "StructureHeight";
-const char* StructureScanComplexItem::layersName =                  "Layers";
-const char* StructureScanComplexItem::gimbalPitchName =             "GimbalPitch";
-const char* StructureScanComplexItem::startFromTopName =            "StartFromTop";
-
-const char* StructureScanComplexItem::jsonComplexItemTypeValue =    "StructureScan";
-const char* StructureScanComplexItem::_jsonCameraCalcKey =          "CameraCalc";
 
 StructureScanComplexItem::StructureScanComplexItem(PlanMasterController* masterController, bool flyView, const QString& kmlOrShpFile)
     : ComplexMissionItem        (masterController, flyView)

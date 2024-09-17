@@ -8,10 +8,9 @@
  ****************************************************************************/
 
 
-#ifndef QmlObjectListModel_H
-#define QmlObjectListModel_H
+#pragma once
 
-#include <QAbstractListModel>
+#include <QtCore/QAbstractListModel>
 
 class QmlObjectListModel : public QAbstractListModel
 {
@@ -28,6 +27,7 @@ public:
     Q_PROPERTY(bool dirty READ dirty WRITE setDirty NOTIFY dirtyChanged)
 
     Q_INVOKABLE QObject* get(int index);
+    const QObject *get(int index) const;
 
     // Property accessors
     
@@ -86,8 +86,6 @@ private:
     bool _skipDirtyFirstItem;
     bool _externalBeginResetModel;
         
-    static const int ObjectRole;
-    static const int TextRole;
+    static constexpr int ObjectRole = Qt::UserRole;
+    static constexpr int TextRole = Qt::UserRole + 1;
 };
-
-#endif

@@ -13,15 +13,15 @@
 ///     @brief  ESP8266 WiFi Config Qml Controller
 ///     @author Gus Grubba <gus@auterion.com>
 
-#ifndef ESP8266ComponentController_H
-#define ESP8266ComponentController_H
+#pragma once
+
+#include "FactPanelController.h"
 
 #include <QtCore/QLoggingCategory>
 
-#include "FactPanelController.h"
-#include "AutoPilotPlugin.h"
-
 Q_DECLARE_LOGGING_CATEGORY(ESP8266ComponentControllerLog)
+
+class Vehicle;
 
 namespace Ui {
     class ESP8266ComponentController;
@@ -30,6 +30,7 @@ namespace Ui {
 class ESP8266ComponentController : public FactPanelController
 {
     Q_OBJECT
+    Q_MOC_INCLUDE("Vehicle.h")
 
 public:
     ESP8266ComponentController      ();
@@ -51,7 +52,7 @@ public:
     Q_INVOKABLE void restoreDefaults();
     Q_INVOKABLE void reboot         ();
 
-    int             componentID     () { return MAV_COMP_ID_UDP_BRIDGE; }
+    int             componentID     ();
     QString         version         ();
     QString         wifiIPAddress   ();
     QString         wifiSSID        ();
@@ -104,5 +105,3 @@ private:
     int         _waitType;
     int         _retries;
 };
-
-#endif // ESP8266ComponentController_H

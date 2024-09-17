@@ -15,36 +15,12 @@
 #include "ParameterManager.h"
 #include "ComponentInformationManager.h"
 #include "MissionManager.h"
+#include "StandardModes.h"
+#include "GeoFenceManager.h"
+#include "RallyPointManager.h"
 #include "QGCLoggingCategory.h"
 
 QGC_LOGGING_CATEGORY(InitialConnectStateMachineLog, "InitialConnectStateMachineLog")
-
-const StateMachine::StateFn InitialConnectStateMachine::_rgStates[] = {
-    InitialConnectStateMachine::_stateRequestAutopilotVersion,
-    InitialConnectStateMachine::_stateRequestProtocolVersion,
-    InitialConnectStateMachine::_stateRequestStandardModes,
-    InitialConnectStateMachine::_stateRequestCompInfo,
-    InitialConnectStateMachine::_stateRequestParameters,
-    InitialConnectStateMachine::_stateRequestMission,
-    InitialConnectStateMachine::_stateRequestGeoFence,
-    InitialConnectStateMachine::_stateRequestRallyPoints,
-    InitialConnectStateMachine::_stateSignalInitialConnectComplete
-};
-
-const int InitialConnectStateMachine::_rgProgressWeights[] = {
-    1, //_stateRequestCapabilities
-    1, //_stateRequestProtocolVersion
-    1, //_stateRequestStandardModes
-    5, //_stateRequestCompInfo
-    5, //_stateRequestParameters
-    2, //_stateRequestMission
-    1, //_stateRequestGeoFence
-    1, //_stateRequestRallyPoints
-    1, //_stateSignalInitialConnectComplete
-};
-
-
-const int InitialConnectStateMachine::_cStates = sizeof(InitialConnectStateMachine::_rgStates) / sizeof(InitialConnectStateMachine::_rgStates[0]);
 
 InitialConnectStateMachine::InitialConnectStateMachine(Vehicle* vehicle)
     : _vehicle(vehicle)

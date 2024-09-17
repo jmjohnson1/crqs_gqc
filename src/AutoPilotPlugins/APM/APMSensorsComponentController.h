@@ -9,14 +9,18 @@
 
 #pragma once
 
-#include <QObject>
-#include <QtCore/QLoggingCategory>
-
 #include "FactPanelController.h"
-#include "APMSensorsComponent.h"
+#include "QGCMAVLink.h"
+
+#include <QtQuick/QQuickItem>
+#include <QtCore/QObject>
+#include <QtCore/QLoggingCategory>
 
 Q_DECLARE_LOGGING_CATEGORY(APMSensorsComponentControllerLog)
 Q_DECLARE_LOGGING_CATEGORY(APMSensorsComponentControllerVerboseLog)
+
+class APMSensorsComponent;
+class LinkInterface;
 
 /// Sensors Component MVC Controller for SensorsComponent.qml.
 class APMSensorsComponentController : public FactPanelController
@@ -91,18 +95,6 @@ public:
     bool compassSetupNeeded (void) const;
     bool accelSetupNeeded   (void) const;
 
-    typedef enum {
-        CalTypeAccel,
-        CalTypeGyro,
-        CalTypeOnboardCompass,
-        CalTypeLevelHorizon,
-        CalTypeCompassMot,
-        CalTypePressure,
-        CalTypeAccelFast,
-        CalTypeNone
-    } CalType_t;
-    Q_ENUM(CalType_t)
-
     bool compass1CalSucceeded(void) const { return _rgCompassCalSucceeded[0]; }
     bool compass2CalSucceeded(void) const { return _rgCompassCalSucceeded[1]; }
     bool compass3CalSucceeded(void) const { return _rgCompassCalSucceeded[2]; }
@@ -121,7 +113,7 @@ signals:
     void resetStatusTextArea                    (void);
     void waitingForCancelChanged                (void);
     void setupNeededChanged                     (void);
-    void calibrationComplete                    (CalType_t calType);
+    void calibrationComplete                    (QGCMAVLink::CalibrationType calType);
     void compass1CalSucceededChanged            (bool compass1CalSucceeded);
     void compass2CalSucceededChanged            (bool compass2CalSucceeded);
     void compass3CalSucceededChanged            (bool compass3CalSucceeded);
@@ -168,7 +160,7 @@ private:
     
     bool _showOrientationCalArea;
     
-    CalType_t _calTypeInProgress;
+    QGCMAVLink::CalibrationType _calTypeInProgress;
 
     uint8_t _rgCompassCalProgress[3];
     bool    _rgCompassCalComplete[3];
@@ -207,7 +199,7 @@ private:
 
     bool _restoreCompassCalFitness;
     float _previousCompassCalFitness;
-    static const char* _compassCalFitnessParam;
+    static constexpr const char* _compassCalFitnessParam = "COMPASS_CAL_FIT";
     
     static const int _supportedFirmwareCalVersion = 2;
 };

@@ -11,14 +11,12 @@
 
 #include "QGCToolbox.h"
 
-#include <QTimer>
-#include <QTime>
-#include <QNetworkReply>
-#include <QMutex>
+#include <QtCore/QMap>
 
 class AppSettings;
 class QGCApplication;
 class LinkInterface;
+class QNetworkReply;
 
 //-----------------------------------------------------------------------------
 class AirLinkManager : public QGCTool

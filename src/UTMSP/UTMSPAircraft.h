@@ -9,9 +9,9 @@
 
 #pragma once
 
-#include "MAVLinkProtocol.h"
-#include "MAVLinkStreamConfig.h"
+#include "MAVLinkLib.h"
 #include <string>
+#include <vector>
 
 class UTMSPAircraft {
 public:

@@ -9,6 +9,7 @@
 
 #include "ArduRoverFirmwarePlugin.h"
 #include "QGCApplication.h"
+#include "Vehicle.h"
 
 bool ArduRoverFirmwarePlugin::_remapParamNameIntialized = false;
 FirmwarePlugin::remapParamNameMajorVersionMap_t ArduRoverFirmwarePlugin::_remapParamName;
@@ -19,11 +20,14 @@ APMRoverMode::APMRoverMode(uint32_t mode, bool settable)
     setEnumToStringMapping({
         {MANUAL,         "Manual"},
         {ACRO,           "Acro"},
+        {LEARNING,       "Learning"},
         {STEERING,       "Steering"},
         {HOLD,           "Hold"},
         {LOITER,         "Loiter"},
         {FOLLOW,         "Follow"},
         {SIMPLE,         "Simple"},
+        {DOCK,           "Dock"},
+        {CIRCLE,         "Circle"},
         {AUTO,           "Auto"},
         {RTL,            "RTL"},
         {SMART_RTL,      "Smart RTL"},
@@ -37,11 +41,14 @@ ArduRoverFirmwarePlugin::ArduRoverFirmwarePlugin(void)
     setSupportedModes({
         APMRoverMode(APMRoverMode::MANUAL       ,true),
         APMRoverMode(APMRoverMode::ACRO         ,true),
+        APMRoverMode(APMRoverMode::LEARNING     ,false),
         APMRoverMode(APMRoverMode::STEERING     ,true),
         APMRoverMode(APMRoverMode::HOLD         ,true),
         APMRoverMode(APMRoverMode::LOITER       ,true),
         APMRoverMode(APMRoverMode::FOLLOW       ,true),
         APMRoverMode(APMRoverMode::SIMPLE       ,true),
+        APMRoverMode(APMRoverMode::DOCK         ,true),
+        APMRoverMode(APMRoverMode::CIRCLE       ,true),
         APMRoverMode(APMRoverMode::AUTO         ,true),
         APMRoverMode(APMRoverMode::RTL          ,true),
         APMRoverMode(APMRoverMode::SMART_RTL    ,true),
@@ -74,9 +81,3 @@ bool ArduRoverFirmwarePlugin::supportsNegativeThrust(Vehicle* /*vehicle*/)
 {
     return true;
 }
-
-void ArduRoverFirmwarePlugin::sendGCSMotionReport(Vehicle* vehicle, FollowMe::GCSMotionReport& motionReport, uint8_t estimatationCapabilities)
-{
-    _sendGCSMotionReport(vehicle, motionReport, estimatationCapabilities);
-}
-

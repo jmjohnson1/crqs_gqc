@@ -10,35 +10,22 @@
 #include "MAVLinkLogManager.h"
 #include "QGCApplication.h"
 #include "SettingsManager.h"
+#include "MultiVehicleManager.h"
+#include "Vehicle.h"
 #include "QGCLoggingCategory.h"
 
-#include <QQmlEngine>
-#include <QSettings>
-#include <QHttpPart>
-#include <QNetworkReply>
+#include <QtQml/QQmlEngine>
+#include <QtCore/QSettings>
+#include <QtNetwork/QHttpPart>
+#include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QNetworkProxy>
 #include <QtCore/QDirIterator>
-#include <QFile>
-#include <QFileInfo>
+#include <QtCore/QFile>
+#include <QtCore/QFileInfo>
 
 QGC_LOGGING_CATEGORY(MAVLinkLogManagerLog, "MAVLinkLogManagerLog")
 
-static const char* kMAVLinkLogGroup         = "MAVLinkLogGroup";
-static const char* kEmailAddressKey         = "Email";
-static const char* kDescriptionsKey         = "Description";
-static const char* kDefaultDescr            = "QGroundControl Session";
-static const char* kPx4URLKey               = "LogURL";
-static const char* kDefaultPx4URL           = "https://logs.px4.io/upload";
-static const char* kEnableAutoUploadKey     = "EnableAutoUpload";
-static const char* kEnableAutoStartKey      = "EnableAutoStart";
-static const char* kEnableDeletetKey        = "EnableDelete";
-static const char* kSidecarExtension        = ".uploaded";
-static const char* kVideoURLKey             = "VideoURL";
-static const char* kWindSpeedKey            = "WindSpeed";
-static const char* kRateKey                 = "RateKey";
-static const char* kPublicLogKey            = "PublicLog";
-static const char* kFeedback                = "feedback";
-static const char* kVideoURL                = "videoUrl";
+static constexpr const char* kSidecarExtension        = ".uploaded";
 
 //-----------------------------------------------------------------------------
 MAVLinkLogFiles::MAVLinkLogFiles(MAVLinkLogManager* manager, const QString& filePath, bool newFile)

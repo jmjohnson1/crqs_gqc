@@ -8,8 +8,11 @@
  ****************************************************************************/
 
 #include "CameraCalcTest.h"
-#include "QGCApplication.h"
+#include "CameraCalc.h"
 #include "PlanMasterController.h"
+#include "MultiSignalSpyV2.h"
+
+#include <QtTest/QTest>
 
 CameraCalcTest::CameraCalcTest(void)
 {
@@ -32,6 +35,8 @@ void CameraCalcTest::init(void)
 
 void CameraCalcTest::cleanup(void)
 {
+    UnitTest::cleanup();
+    
     delete _masterController;
     delete _cameraCalc;
     delete _multiSpy;

@@ -8,10 +8,11 @@
  ****************************************************************************/
 
 
-#ifndef APMMotorComponent_H
-#define APMMotorComponent_H
+#pragma once
 
 #include "MotorComponent.h"
+
+class AutoPilotPlugin;
 
 class APMMotorComponent : public MotorComponent
 {
@@ -29,5 +30,3 @@ public:
 private:
     const QString   _name;
 };
-
-#endif

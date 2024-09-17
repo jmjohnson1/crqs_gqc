@@ -9,21 +9,22 @@
 
 #pragma once
 
-#include "PX4FirmwareUpgradeThread.h"
-#include "FirmwareImage.h"
-#include "Fact.h"
+#include "QGCSerialPortInfo.h"
 
-#include <QObject>
-#include <QTimer>
-#include <QPixmap>
-#include <QQuickItem>
+#include <QtCore/QObject>
+#include <QtCore/QTimer>
+#include <QtGui/QPixmap>
+#include <QtQuick/QQuickItem>
 #ifdef Q_OS_ANDROID
-#include "qserialport.h"
+#include "qserialportinfo.h"
 #else
-#include <QSerialPort>
+#include <QtSerialPort/QSerialPortInfo>
 #endif
 
-#include <stdint.h>
+class PX4FirmwareUpgradeThread;
+class PX4FirmwareUpgradeThreadController;
+class FirmwareImage;
+class Fact;
 
 /// Supported firmware types. If you modify these you will need to update the qml file as well.
 
@@ -256,18 +257,18 @@ private:
 
     const QString _apmBoardDescriptionReplaceText;
 
-    static const char* _manifestFirmwareJsonKey;
-    static const char* _manifestBoardIdJsonKey;
-    static const char* _manifestMavTypeJsonKey;
-    static const char* _manifestFormatJsonKey;
-    static const char* _manifestUrlJsonKey;
-    static const char* _manifestMavFirmwareVersionTypeJsonKey;
-    static const char* _manifestUSBIDJsonKey;
-    static const char* _manifestMavFirmwareVersionJsonKey;
-    static const char* _manifestBootloaderStrJsonKey;
-    static const char* _manifestLatestKey;
-    static const char* _manifestPlatformKey;
-    static const char* _manifestBrandNameKey;
+    static constexpr const char* _manifestFirmwareJsonKey =               "firmware";
+    static constexpr const char* _manifestBoardIdJsonKey =                "board_id";
+    static constexpr const char* _manifestMavTypeJsonKey =                "mav-type";
+    static constexpr const char* _manifestFormatJsonKey =                 "format";
+    static constexpr const char* _manifestUrlJsonKey =                    "url";
+    static constexpr const char* _manifestMavFirmwareVersionTypeJsonKey = "mav-firmware-version-type";
+    static constexpr const char* _manifestUSBIDJsonKey =                  "USBID";
+    static constexpr const char* _manifestMavFirmwareVersionJsonKey =     "mav-firmware-version";
+    static constexpr const char* _manifestBootloaderStrJsonKey =          "bootloader_str";
+    static constexpr const char* _manifestLatestKey =                     "latest";
+    static constexpr const char* _manifestPlatformKey =                   "platform";
+    static constexpr const char* _manifestBrandNameKey =                  "brand_name";
 
     typedef struct {
         uint32_t                boardId;

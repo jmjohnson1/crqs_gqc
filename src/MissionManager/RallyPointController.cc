@@ -10,21 +10,18 @@
 #include "RallyPointController.h"
 #include "RallyPoint.h"
 #include "Vehicle.h"
-#include "FirmwarePlugin.h"
-#include "MAVLinkProtocol.h"
 #include "QGCApplication.h"
 #include "JsonHelper.h"
 #include "SettingsManager.h"
 #include "AppSettings.h"
 #include "PlanMasterController.h"
+#include "RallyPointManager.h"
+#include "Vehicle.h"
 #include "QGCLoggingCategory.h"
 
-#include <QJsonArray>
+#include <QtCore/QJsonArray>
 
 QGC_LOGGING_CATEGORY(RallyPointControllerLog, "RallyPointControllerLog")
-
-const char* RallyPointController::_jsonFileTypeValue =  "RallyPoints";
-const char* RallyPointController::_jsonPointsKey =      "points";
 
 RallyPointController::RallyPointController(PlanMasterController* masterController, QObject* parent)
     : PlanElementController (masterController, parent)

@@ -10,21 +10,16 @@
 #include "FixedWingLandingComplexItem.h"
 #include "JsonHelper.h"
 #include "MissionController.h"
+#include "MissionItem.h"
 #include "PlanMasterController.h"
 #include "FlightPathSegment.h"
 #include "QGCLoggingCategory.h"
 
+#include <QtCore/QJsonArray>
+
 QGC_LOGGING_CATEGORY(FixedWingLandingComplexItemLog, "FixedWingLandingComplexItemLog")
 
 const QString FixedWingLandingComplexItem::name(FixedWingLandingComplexItem::tr("Fixed Wing Landing"));
-
-const char* FixedWingLandingComplexItem::settingsGroup                      = "FixedWingLanding";
-const char* FixedWingLandingComplexItem::jsonComplexItemTypeValue           = "fwLandingPattern";
-
-const char* FixedWingLandingComplexItem::glideSlopeName                     = "GlideSlope";
-const char* FixedWingLandingComplexItem::valueSetIsDistanceName             = "ValueSetIsDistance";
-
-const char* FixedWingLandingComplexItem::_jsonValueSetIsDistanceKey         = "valueSetIsDistance";
 
 FixedWingLandingComplexItem::FixedWingLandingComplexItem(PlanMasterController* masterController, bool flyView)
     : LandingComplexItem        (masterController, flyView)

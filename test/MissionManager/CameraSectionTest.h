@@ -10,8 +10,10 @@
 #pragma once
 
 #include "SectionTest.h"
-#include "CameraSection.h"
-#include "PlanMasterController.h"
+
+class CameraSection;
+class PlanMasterController;
+class SimpleMissionItem;
 
 /// Unit test for CameraSection
 class CameraSectionTest : public SectionTest

@@ -11,8 +11,13 @@
 #include "QGCApplication.h"
 #include "MockLink.h"
 #include "LinkManager.h"
+#include "MultiVehicleManager.h"
+#include "Vehicle.h"
 #include "QGCApplication.h"
 #include "MultiSignalSpyV2.h"
+
+#include <QtTest/QTest>
+#include <QtTest/QSignalSpy>
 
 const char* VehicleLinkManagerTest::_primaryLinkChangedSignalName               = "primaryLinkChanged";
 const char* VehicleLinkManagerTest::_allLinksRemovedSignalName                  = "allLinksRemoved";

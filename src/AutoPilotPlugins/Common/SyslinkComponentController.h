@@ -7,13 +7,14 @@
  *
  ****************************************************************************/
 
-#ifndef SyslinkComponentController_H
-#define SyslinkComponentController_H
-
-#include <QtCore/QLoggingCategory>
+#pragma once
 
 #include "FactPanelController.h"
-#include "AutoPilotPlugin.h"
+
+#include <QtCore/QLoggingCategory>
+#include <QtCore/QVariant>
+
+class Vehicle;
 
 Q_DECLARE_LOGGING_CATEGORY(SyslinkComponentControllerLog)
 
@@ -24,6 +25,7 @@ namespace Ui {
 class SyslinkComponentController : public FactPanelController
 {
     Q_OBJECT
+    Q_MOC_INCLUDE("Vehicle.h")
 
 public:
     SyslinkComponentController      ();
@@ -62,5 +64,3 @@ private:
     QStringList _dataRates;
 
 };
-
-#endif // SyslinkComponentController_H

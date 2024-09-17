@@ -9,47 +9,26 @@
 
 #include "FirmwarePlugin.h"
 #include "QGCApplication.h"
-#include "Generic/GenericAutoPilotPlugin.h"
+#include "GenericAutoPilotPlugin.h"
+#include "AutoPilotPlugin.h"
 #include "CameraMetaData.h"
 #include "QGCFileDownload.h"
 #include "QGCCameraManager.h"
 #include "RadioComponentController.h"
 #include "Autotune.h"
 #include "VehicleCameraControl.h"
+#include "VehicleComponent.h"
+#include "MAVLinkProtocol.h"
 #include "QGC.h"
 #include "QGCLoggingCategory.h"
 
-#include <QRegularExpression>
+#include <QtCore/QRegularExpression>
 
 QGC_LOGGING_CATEGORY(FirmwarePluginLog, "FirmwarePluginLog")
-
-static FirmwarePluginFactoryRegister* _instance = nullptr;
 
 const QString guided_mode_not_supported_by_vehicle = QObject::tr("Guided mode not supported by Vehicle.");
 
 QVariantList FirmwarePlugin::_cameraList;
-
-const QString FirmwarePlugin::px4FollowMeFlightMode(QObject::tr("Follow Me"));
-
-FirmwarePluginFactory::FirmwarePluginFactory(void)
-{
-    FirmwarePluginFactoryRegister::instance()->registerPluginFactory(this);
-}
-
-QList<QGCMAVLink::VehicleClass_t> FirmwarePluginFactory::supportedVehicleClasses(void) const
-{
-    return QGCMAVLink::allVehicleClasses();
-}
-
-FirmwarePluginFactoryRegister* FirmwarePluginFactoryRegister::instance(void)
-{
-    if (!_instance) {
-        _instance = new FirmwarePluginFactoryRegister;
-    }
-
-    return _instance;
-}
-
 
 FirmwarePlugin::FirmwarePlugin(void)
 {
@@ -329,11 +308,12 @@ const QVariantList& FirmwarePlugin::toolIndicators(const Vehicle*)
         _toolIndicatorList = QVariantList({
             QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Controls/FlightModeIndicator.qml")),
             QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/MessageIndicator.qml")),
-            QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/GPSIndicator.qml")),
+            QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/VehicleGPSIndicator.qml")),
             QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/TelemetryRSSIIndicator.qml")),
             QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/RCRSSIIndicator.qml")),
             QVariant::fromValue(QUrl::fromUserInput("qrc:/qml/QGroundControl/Controls/BatteryIndicator.qml")),
             QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/RemoteIDIndicator.qml")),
+            QVariant::fromValue(QUrl::fromUserInput("qrc:/toolbar/GimbalIndicator.qml")),
         });
     }
     return _toolIndicatorList;
@@ -956,7 +936,7 @@ bool FirmwarePlugin::_armVehicleAndValidate(Vehicle* vehicle)
             break;
         }
         QGC::SLEEP::msleep(100);
-        qgcApp()->processEvents(QEventLoop::ExcludeUserInputEvents);
+        QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
     }
 
     return vehicleArmed;
@@ -981,7 +961,7 @@ bool FirmwarePlugin::_setFlightModeAndValidate(Vehicle* vehicle, const QString& 
                 break;
             }
             QGC::SLEEP::msleep(100);
-            qgcApp()->processEvents(QEventLoop::ExcludeUserInputEvents);
+            QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
         }
         if (flightModeChanged) {
             break;
@@ -1130,32 +1110,37 @@ QString FirmwarePlugin::gotoFlightMode(void) const
     return QString();
 }
 
-void FirmwarePlugin::sendGCSMotionReport(Vehicle* vehicle, FollowMe::GCSMotionReport& motionReport, uint8_t estimationCapabilities)
+void FirmwarePlugin::sendGCSMotionReport(Vehicle *vehicle, FollowMe::GCSMotionReport &motionReport, uint8_t estimationCapabilities)
 {
-    WeakLinkInterfacePtr weakLink = vehicle->vehicleLinkManager()->primaryLink();
-    if (!weakLink.expired()) {
-        MAVLinkProtocol*        mavlinkProtocol = qgcApp()->toolbox()->mavlinkProtocol();
-        mavlink_follow_target_t follow_target   = {};
-        SharedLinkInterfacePtr  sharedLink      = weakLink.lock();
+    Q_CHECK_PTR(vehicle);
 
-        follow_target.timestamp =           qgcApp()->msecsSinceBoot();
-        follow_target.est_capabilities =    estimationCapabilities;
-        follow_target.position_cov[0] =     static_cast<float>(motionReport.pos_std_dev[0]);
-        follow_target.position_cov[2] =     static_cast<float>(motionReport.pos_std_dev[2]);
-        follow_target.alt =                 static_cast<float>(motionReport.altMetersAMSL);
-        follow_target.lat =                 motionReport.lat_int;
-        follow_target.lon =                 motionReport.lon_int;
-        follow_target.vel[0] =              static_cast<float>(motionReport.vxMetersPerSec);
-        follow_target.vel[1] =              static_cast<float>(motionReport.vyMetersPerSec);
-
-        mavlink_message_t message;
-        mavlink_msg_follow_target_encode_chan(static_cast<uint8_t>(mavlinkProtocol->getSystemId()),
-                                              static_cast<uint8_t>(mavlinkProtocol->getComponentId()),
-                                              sharedLink->mavlinkChannel(),
-                                              &message,
-                                              &follow_target);
-        vehicle->sendMessageOnLinkThreadSafe(sharedLink.get(), message);
+    SharedLinkInterfacePtr sharedLink = vehicle->vehicleLinkManager()->primaryLink().lock();
+    if (!sharedLink) {
+        return;
     }
+
+    const MAVLinkProtocol* const mavlinkProtocol = qgcApp()->toolbox()->mavlinkProtocol();
+    mavlink_follow_target_t follow_target{0};
+
+    follow_target.timestamp = qgcApp()->msecsSinceBoot();
+    follow_target.est_capabilities = estimationCapabilities;
+    follow_target.position_cov[0] = static_cast<float>(motionReport.pos_std_dev[0]);
+    follow_target.position_cov[2] = static_cast<float>(motionReport.pos_std_dev[2]);
+    follow_target.alt = static_cast<float>(motionReport.altMetersAMSL);
+    follow_target.lat = motionReport.lat_int;
+    follow_target.lon = motionReport.lon_int;
+    follow_target.vel[0] = static_cast<float>(motionReport.vxMetersPerSec);
+    follow_target.vel[1] = static_cast<float>(motionReport.vyMetersPerSec);
+
+    mavlink_message_t message;
+    mavlink_msg_follow_target_encode_chan(
+        static_cast<uint8_t>(mavlinkProtocol->getSystemId()),
+        static_cast<uint8_t>(mavlinkProtocol->getComponentId()),
+        sharedLink->mavlinkChannel(),
+        &message,
+        &follow_target
+    );
+    vehicle->sendMessageOnLinkThreadSafe(sharedLink.get(), message);
 }
 
 Autotune* FirmwarePlugin::createAutotune(Vehicle *vehicle)

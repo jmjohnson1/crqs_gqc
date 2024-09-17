@@ -11,10 +11,6 @@
 #include "Common.h"
 #include "QGCApplication.h"
 
-#include <QDebug>
-
-#include <cmath>
-
 using namespace ActuatorTesting;
 
 ActuatorTest::ActuatorTest(Vehicle* vehicle)
@@ -35,7 +31,11 @@ ActuatorTest::~ActuatorTest()
 void ActuatorTest::updateFunctions(const QList<Actuator*> &actuators)
 {
     _actuators->clearAndDeleteContents();
-    _allMotorsActuator->deleteLater();
+
+    if (_allMotorsActuator) {
+      _allMotorsActuator->deleteLater();
+    }
+
     _allMotorsActuator = nullptr;
 
     Actuator* motorActuator{nullptr};

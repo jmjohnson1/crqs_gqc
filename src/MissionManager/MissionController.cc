@@ -7,9 +7,8 @@
  *
  ****************************************************************************/
 
-#include "MissionCommandUIInfo.h"
 #include "MissionController.h"
-#include "MultiVehicleManager.h"
+#include "Vehicle.h"
 #include "MissionManager.h"
 #include "FlightPathSegment.h"
 #include "FirmwarePlugin.h"
@@ -30,29 +29,16 @@
 #include "QGCCorePlugin.h"
 #include "TakeoffMissionItem.h"
 #include "PlanViewSettings.h"
+#include "MissionCommandTree.h"
 #include "QGC.h"
 #include "QGCLoggingCategory.h"
+
+#include <QtCore/QJsonArray>
+#include <QtCore/QJsonDocument>
 
 #define UPDATE_TIMEOUT 5000 ///< How often we check for bounding box changes
 
 QGC_LOGGING_CATEGORY(MissionControllerLog, "MissionControllerLog")
-
-const char* MissionController::_settingsGroup =                 "MissionController";
-const char* MissionController::_jsonFileTypeValue =             "Mission";
-const char* MissionController::_jsonItemsKey =                  "items";
-const char* MissionController::_jsonPlannedHomePositionKey =    "plannedHomePosition";
-const char* MissionController::_jsonFirmwareTypeKey =           "firmwareType";
-const char* MissionController::_jsonVehicleTypeKey =            "vehicleType";
-const char* MissionController::_jsonCruiseSpeedKey =            "cruiseSpeed";
-const char* MissionController::_jsonHoverSpeedKey =             "hoverSpeed";
-const char* MissionController::_jsonParamsKey =                 "params";
-const char* MissionController::_jsonGlobalPlanAltitudeModeKey = "globalPlanAltitudeMode";
-
-// Deprecated V1 format keys
-const char* MissionController::_jsonComplexItemsKey =           "complexItems";
-const char* MissionController::_jsonMavAutopilotKey =           "MAV_AUTOPILOT";
-
-const int   MissionController::_missionFileVersion =            2;
 
 MissionController::MissionController(PlanMasterController* masterController, QObject *parent)
     : PlanElementController (masterController, parent)
@@ -978,7 +964,7 @@ bool MissionController::_loadTextMissionFile(QTextStream& stream, QmlObjectListM
             }
         }
     } else {
-        errorString = tr("The mission file is not compatible with this version of %1.").arg(qgcApp()->applicationName());
+        errorString = tr("The mission file is not compatible with this version of %1.").arg(QCoreApplication::applicationName());
         return false;
     }
 
@@ -2487,6 +2473,8 @@ void MissionController::setCurrentPlanViewSeqNum(int sequenceNumber, bool force)
                 }
             } else {
                 pVI->setIsCurrentItem(false);
+                // Child items will always be later in the mission sequence, so this should be correct, to be sure the HasCurrentChildItem is cleared
+                pVI->setHasCurrentChildItem(false);
             }
         }
 

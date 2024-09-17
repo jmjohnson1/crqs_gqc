@@ -8,10 +8,11 @@
  ****************************************************************************/
 
 #include "FWLandingPatternTest.h"
-#include "QGCApplication.h"
-#include "MissionCommandTree.h"
-#include "MissionCommandUIInfo.h"
 #include "CameraSectionTest.h"
+#include "MultiSignalSpy.h"
+#include "FixedWingLandingComplexItem.h"
+
+#include <QtCore/QJsonArray>
 
 FWLandingPatternTest::FWLandingPatternTest(void)
 {

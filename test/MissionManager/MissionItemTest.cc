@@ -9,11 +9,13 @@
 
 
 #include "MissionItemTest.h"
-#include "LinkManager.h"
-#include "MultiVehicleManager.h"
-#include "MissionItem.h"
 #include "SimpleMissionItem.h"
-#include "QGCApplication.h"
+#include "PlanMasterController.h"
+#include "MultiSignalSpy.h"
+
+#include <QtTest/QTest>
+#include <QtTest/QSignalSpy>
+#include <QtCore/QJsonArray>
 
 #if 0
 const MissionItemTest::TestCase_t MissionItemTest::_rgTestCases[] = {

@@ -8,15 +8,15 @@
  ****************************************************************************/
 
 #include "MissionSettingsItem.h"
-#include "JsonHelper.h"
-#include "MissionController.h"
 #include "PlanMasterController.h"
+#include "MissionItem.h"
 #include "QGC.h"
+#include "Vehicle.h"
 #include "QGCLoggingCategory.h"
 
-QGC_LOGGING_CATEGORY(MissionSettingsItemLog, "MissionSettingsItemLog")
+#include <QtCore/QJsonArray>
 
-const char* MissionSettingsItem::_plannedHomePositionAltitudeName = "PlannedHomePositionAltitude";
+QGC_LOGGING_CATEGORY(MissionSettingsItemLog, "MissionSettingsItemLog")
 
 QMap<QString, FactMetaData*> MissionSettingsItem::_metaDataMap;
 

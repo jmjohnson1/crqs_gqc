@@ -8,15 +8,14 @@
  ****************************************************************************/
 
 
-#ifndef APMParameterMetaData_H
-#define APMParameterMetaData_H
+#pragma once
 
-#include <QObject>
-#include <QMap>
-#include <QXmlStreamReader>
-#include <QLoggingCategory>
+#include <QtCore/QObject>
+#include <QtCore/QMap>
+#include <QtCore/QXmlStreamReader>
+#include <QtCore/QLoggingCategory>
 
-#include "QGCMAVLink.h"
+#include "MAVLinkLib.h"
 #include "FactMetaData.h"
 
 Q_DECLARE_LOGGING_CATEGORY(APMParameterMetaDataLog)
@@ -85,6 +84,6 @@ private:
     bool                                            _parameterMetaDataLoaded        = false;    ///< true: parameter meta data already loaded
     // FIXME: metadata is vehicle type specific now
     QMap<QString, ParameterNametoFactMetaDataMap>   _vehicleTypeToParametersMap;                ///< Maps from a vehicle type to paramametertoFactMeta map>
-};
 
-#endif
+    static constexpr const char* kInvalidConverstion = "Internal Error: No support for string parameters";
+};

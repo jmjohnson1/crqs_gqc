@@ -13,8 +13,13 @@
 #include "QGCApplication.h"
 #include "LinkManager.h"
 #include "QGC.h"
+#include "Fact.h"
+#include "Vehicle.h"
+#include "ParameterManager.h"
 
-#include <QVariant>
+#include <QtCore/QVariant>
+#include <QtQml/QtQml>
+#include <QtGui/QCursor>
 
 bool AirframeComponentController::_typesRegistered = false;
 
@@ -31,14 +36,14 @@ AirframeComponentController::AirframeComponentController(void) :
     
     QStringList usedParams;
     usedParams << "SYS_AUTOSTART" << "SYS_AUTOCONFIG";
-    if (!_allParametersExists(FactSystem::defaultComponentId, usedParams)) {
+    if (!_allParametersExists(ParameterManager::defaultComponentId, usedParams)) {
         return;
     }
     
     // Load up member variables
     
     bool autostartFound = false;
-    _autostartId = getParameterFact(FactSystem::defaultComponentId, "SYS_AUTOSTART")->rawValue().toInt();
+    _autostartId = getParameterFact(ParameterManager::defaultComponentId, "SYS_AUTOSTART")->rawValue().toInt();
 
     
     for (int tindex = 0; tindex < AirframeComponentAirframes::get().count(); tindex++) {
@@ -84,8 +89,8 @@ void AirframeComponentController::changeAutostart(void)
         qgcApp()->showAppMessage(tr("You cannot change airframe configuration while connected to multiple vehicles."));
 		return;
 	}
-	
-    qgcApp()->setOverrideCursor(Qt::WaitCursor);
+
+    QGuiApplication::overrideCursor()->setShape(Qt::WaitCursor);
     
     Fact* sysAutoStartFact  = getParameterFact(-1, "SYS_AUTOSTART");
     Fact* sysAutoConfigFact = getParameterFact(-1, "SYS_AUTOCONFIG");
@@ -116,12 +121,12 @@ void AirframeComponentController::_waitParamWriteSignal(QVariant value)
 void AirframeComponentController::_rebootAfterStackUnwind(void)
 {    
     _vehicle->sendMavCommand(_vehicle->defaultComponentId(), MAV_CMD_PREFLIGHT_REBOOT_SHUTDOWN, true /* showError */, 1.0f);
-    qgcApp()->processEvents(QEventLoop::ExcludeUserInputEvents);
+    QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
     for (unsigned i = 0; i < 2000; i++) {
         QGC::SLEEP::usleep(500);
-        qgcApp()->processEvents(QEventLoop::ExcludeUserInputEvents);
+        QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
     }
-    qgcApp()->restoreOverrideCursor();
+    QGuiApplication::restoreOverrideCursor();
     qgcApp()->toolbox()->linkManager()->disconnectAll();
 }
 

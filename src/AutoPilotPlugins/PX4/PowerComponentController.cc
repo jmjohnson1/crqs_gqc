@@ -8,6 +8,7 @@
  ****************************************************************************/
 
 #include "PowerComponentController.h"
+#include "Vehicle.h"
 
 PowerComponentController::PowerComponentController(void)
 {
@@ -18,7 +19,7 @@ void PowerComponentController::calibrateEsc(void)
 {
     _warningMessages.clear();
     connect(_vehicle, &Vehicle::textMessageReceived, this, &PowerComponentController::_handleVehicleTextMessage);
-    _vehicle->startCalibration(Vehicle::CalibrationEsc);
+    _vehicle->startCalibration(QGCMAVLink::CalibrationEsc);
 }
 
 void PowerComponentController::startBusConfigureActuators(void)

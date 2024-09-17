@@ -12,12 +12,7 @@
 #include "MissionCommandUIInfo.h"
 #include "QGCLoggingCategory.h"
 
-#include <QStringList>
-#include <QJsonArray>
-
-const char* MissionCommandList::qgcFileType =           "MavCmdInfo";
-const char* MissionCommandList::_versionJsonKey =       "version";
-const char* MissionCommandList::_mavCmdInfoJsonKey =    "mavCmdInfo";
+#include <QtCore/QJsonArray>
 
 MissionCommandList::MissionCommandList(const QString& jsonFilename, bool baseCommandList, QObject* parent)
     : QObject(parent)

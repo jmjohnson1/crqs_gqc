@@ -7,95 +7,106 @@
  *
  ****************************************************************************/
 
-#include <QNetworkAccessManager>
-#include <QNetworkRequest>
-
 #include "MapProvider.h"
+#include <QGCLoggingCategory.h>
+
+#include <QtCore/QLocale>
+
+QGC_LOGGING_CATEGORY(MapProviderLog, "qgc.qtlocationplugin.mapprovider")
+
+// QtLocation expects MapIds to start at 1 and be sequential.
+int MapProvider::_mapIdIndex = 1;
 
 MapProvider::MapProvider(
-    const QString &referrer, 
+    const QString &mapName,
+    const QString &referrer,
     const QString &imageFormat,
-    const quint32 averageSize, 
-    const QGeoMapType::MapStyle mapStyle, 
-    QObject* parent)
-    : QObject       (parent)
-    , _referrer     (referrer)
-    , _imageFormat  (imageFormat)
-    , _averageSize  (averageSize)
-    , _mapStyle     (mapStyle)
+    quint32 averageSize,
+    QGeoMapType::MapStyle mapStyle)
+    : _mapName(mapName)
+    , _referrer(referrer)
+    , _imageFormat(imageFormat)
+    , _averageSize(averageSize)
+    , _mapStyle(mapStyle)
+    , _language(!QLocale::system().uiLanguages().isEmpty() ? QLocale::system().uiLanguages().constFirst() : "en")
+    , _mapId(_mapIdIndex++)
 {
-    const QStringList langs = QLocale::system().uiLanguages();
-    if (langs.length() > 0) {
-        _language = langs[0];
-    }
+    // qCDebug(MapProviderLog) << Q_FUNC_INFO << this << _mapId;
 }
 
-QNetworkRequest MapProvider::getTileURL(const int x, const int y, const int zoom, QNetworkAccessManager* networkManager) {
-    //-- Build URL
-    QNetworkRequest request;
-    const QString url = _getURL(x, y, zoom, networkManager);
-    if (url.isEmpty()) {
-        return request;
-    }
-    request.setUrl(QUrl(url));
-    request.setRawHeader(QByteArrayLiteral("Accept"), QByteArrayLiteral("*/*"));
-    request.setRawHeader(QByteArrayLiteral("Referrer"), _referrer.toUtf8());
-    request.setRawHeader(QByteArrayLiteral("User-Agent"), _userAgent);
-    return request;
+MapProvider::~MapProvider()
+{
+    // qCDebug(MapProviderLog) << Q_FUNC_INFO << this << _mapId;
 }
 
-QString MapProvider::getImageFormat(const QByteArray& image) const {
-    QString format;
-    if (image.size() > 2) {
-        if (image.startsWith(reinterpret_cast<const char*>(pngSignature)))
-            format = QStringLiteral("png");
-        else if (image.startsWith(reinterpret_cast<const char*>(jpegSignature)))
-            format = QStringLiteral("jpg");
-        else if (image.startsWith(reinterpret_cast<const char*>(gifSignature)))
-            format = QStringLiteral("gif");
-        else {
-            return _imageFormat;
-        }
-    }
-    return format;
+QUrl MapProvider::getTileURL(int x, int y, int zoom) const
+{
+    return QUrl(_getURL(x, y, zoom));
 }
 
-QString MapProvider::_tileXYToQuadKey(const int tileX, const int tileY, const int levelOfDetail) const {
+QString MapProvider::getImageFormat(QByteArrayView image) const
+{
+    if (image.size() < 3) {
+        return QString();
+    }
+
+    static constexpr QByteArrayView pngSignature("\x89\x50\x4E\x47\x0D\x0A\x1A\x0A");
+    if (image.startsWith(pngSignature)) {
+        return QStringLiteral("png");
+    }
+
+    static constexpr QByteArrayView jpegSignature("\xFF\xD8\xFF");
+    if (image.startsWith(jpegSignature)) {
+        return QStringLiteral("jpg");
+    }
+
+    static constexpr QByteArrayView gifSignature("\x47\x49\x46\x38");
+    if (image.startsWith(gifSignature)) {
+        return QStringLiteral("gif");
+    }
+
+    return _imageFormat;
+}
+
+QString MapProvider::_tileXYToQuadKey(int tileX, int tileY, int levelOfDetail) const
+{
     QString quadKey;
     for (int i = levelOfDetail; i > 0; i--) {
         char digit = '0';
-        const int  mask  = 1 << (i - 1);
+        const int mask = 1 << (i - 1);
+
         if ((tileX & mask) != 0) {
             digit++;
         }
         if ((tileY & mask) != 0) {
-            digit++;
-            digit++;
+            digit += 2;
         }
-        quadKey.append(digit);
+
+        (void) quadKey.append(digit);
     }
+
     return quadKey;
 }
 
-int MapProvider::_getServerNum(const int x, const int y, const int max) const {
+int MapProvider::_getServerNum(int x, int y, int max) const
+{
     return (x + 2 * y) % max;
 }
 
-int MapProvider::long2tileX(const double lon, const int z) const {
+int MapProvider::long2tileX(double lon, int z) const
+{
     return static_cast<int>(floor((lon + 180.0) / 360.0 * pow(2.0, z)));
 }
 
-//-----------------------------------------------------------------------------
-int MapProvider::lat2tileY(const double lat, const int z) const {
-    return static_cast<int>(floor(
-        (1.0 -
-         log(tan(lat * M_PI / 180.0) + 1.0 / cos(lat * M_PI / 180.0)) / M_PI) /
-        2.0 * pow(2.0, z)));
+int MapProvider::lat2tileY(double lat, int z) const
+{
+    return static_cast<int>(floor((1.0 - log(tan(lat * M_PI / 180.0) + 1.0 / cos(lat * M_PI / 180.0)) / M_PI) / 2.0 * pow(2.0, z)));
 }
 
-QGCTileSet MapProvider::getTileCount(const int zoom, const double topleftLon,
-                                     const double topleftLat, const double bottomRightLon,
-                                     const double bottomRightLat) const {
+QGCTileSet MapProvider::getTileCount(int zoom, double topleftLon,
+                                     double topleftLat, double bottomRightLon,
+                                     double bottomRightLat) const
+{
     QGCTileSet set;
     set.tileX0 = long2tileX(topleftLon, zoom);
     set.tileY0 = lat2tileY(topleftLat, zoom);
@@ -110,3 +121,5 @@ QGCTileSet MapProvider::getTileCount(const int zoom, const double topleftLon,
     set.tileSize = getAverageSize() * set.tileCount;
     return set;
 }
+
+// Resolution math: https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#Resolution_and_Scale

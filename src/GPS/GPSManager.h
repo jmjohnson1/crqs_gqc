@@ -10,12 +10,16 @@
 
 #pragma once
 
-#include "GPSProvider.h"
-#include "RTCM/RTCMMavlink.h"
-#include <QGCToolbox.h>
+#include "QGCToolbox.h"
+#include "GPSPositionMessage.h"
 
-#include <QString>
-#include <QObject>
+#include <QtCore/QString>
+#include <QtCore/QObject>
+
+class GPSRTKFactGroup;
+class FactGroup;
+class RTCMMavlink;
+class GPSProvider;
 
 /**
  ** class GPSManager
@@ -28,9 +32,12 @@ public:
     GPSManager(QGCApplication* app, QGCToolbox* toolbox);
     ~GPSManager();
 
+    void setToolbox(QGCToolbox* toolbox) override;
+
     void connectGPS     (const QString& device, const QString& gps_type);
     void disconnectGPS  (void);
-    bool connected      (void) const { return _gpsProvider && _gpsProvider->isRunning(); }
+    bool connected      (void) const;
+    FactGroup* gpsRtkFactGroup(void);
 
 signals:
     void onConnect();
@@ -41,10 +48,15 @@ signals:
 private slots:
     void GPSPositionUpdate(GPSPositionMessage msg);
     void GPSSatelliteUpdate(GPSSatelliteMessage msg);
+    void _onGPSConnect(void);
+    void _onGPSDisconnect(void);
+    void _gpsSurveyInStatus(float duration, float accuracyMM,  double latitude, double longitude, float altitude, bool valid, bool active);
+    void _gpsNumSatellites(int numSatellites);
 
 private:
     GPSProvider* _gpsProvider = nullptr;
     RTCMMavlink* _rtcmMavlink = nullptr;
+    GPSRTKFactGroup* _gpsRtkFactGroup = nullptr;
 
     std::atomic_bool _requestGpsStop; ///< signals the thread to quit
 };

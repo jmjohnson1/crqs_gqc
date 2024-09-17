@@ -12,8 +12,11 @@
 ///     @author Don Gagne <don@thegagnes.com>
 
 #include "VehicleComponent.h"
-#include "AutoPilotPlugin.h"
 #include "ParameterManager.h"
+#include "Vehicle.h"
+
+#include <QtQml/QQmlContext>
+#include <QtQuick/QQuickItem>
 
 VehicleComponent::VehicleComponent(Vehicle* vehicle, AutoPilotPlugin* autopilot, QObject* parent) :
     QObject(parent),
@@ -55,8 +58,8 @@ void VehicleComponent::setupTriggerSignals(void)
 {
     // Watch for changed on trigger list params
     for (const QString &paramName: setupCompleteChangedTriggerList()) {
-        if (_vehicle->parameterManager()->parameterExists(FactSystem::defaultComponentId, paramName)) {
-            Fact* fact = _vehicle->parameterManager()->getParameter(FactSystem::defaultComponentId, paramName);
+        if (_vehicle->parameterManager()->parameterExists(ParameterManager::defaultComponentId, paramName)) {
+            Fact* fact = _vehicle->parameterManager()->getParameter(ParameterManager::defaultComponentId, paramName);
             connect(fact, &Fact::valueChanged, this, &VehicleComponent::_triggerUpdated);
         }
     }
@@ -64,5 +67,5 @@ void VehicleComponent::setupTriggerSignals(void)
 
 void VehicleComponent::_triggerUpdated(QVariant /*value*/)
 {
-    emit setupCompleteChanged(setupComplete());
+    emit setupCompleteChanged();
 }

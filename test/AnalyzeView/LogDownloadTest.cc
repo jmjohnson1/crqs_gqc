@@ -9,9 +9,11 @@
 
 #include "LogDownloadTest.h"
 #include "LogDownloadController.h"
+#include "LogEntry.h"
 #include "MockLink.h"
+#include "MultiSignalSpy.h"
 
-#include <QDir>
+#include <QtCore/QDir>
 
 LogDownloadTest::LogDownloadTest(void)
 {

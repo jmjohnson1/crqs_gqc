@@ -9,13 +9,13 @@
 
 #pragma once
 
-#include <QObject>
-#include <QList>
-#include <QGeoCoordinate>
-
-#include "shapefil.h"
 
 #include "ShapeFileHelper.h"
+#include "shapefil.h"
+
+#include <QtCore/QObject>
+#include <QtCore/QList>
+#include <QtPositioning/QGeoCoordinate>
 
 /// The QGCMapPolygon class provides a polygon which can be displayed on a map using a map visuals control.
 /// It maintains a representation of the polygon on QVariantList and QmlObjectListModel format.
@@ -31,5 +31,5 @@ private:
     static bool         _validateSHPFiles(const QString& shpFile, int* utmZone, bool* utmSouthernHemisphere, QString& errorString);
     static SHPHandle    _loadShape(const QString& shpFile, int* utmZone, bool* utmSouthernHemisphere, QString& errorString);
 
-    static const char* _errorPrefix;
+    static constexpr const char* _errorPrefix = QT_TR_NOOP("SHP file load failed. %1");
 };

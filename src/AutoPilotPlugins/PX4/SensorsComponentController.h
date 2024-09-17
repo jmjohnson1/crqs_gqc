@@ -11,10 +11,9 @@
 /// @file
 ///     @author Don Gagne <don@thegagnes.com>
 
-#ifndef SENSORSCOMPONENTCONTROLLER_H
-#define SENSORSCOMPONENTCONTROLLER_H
+#pragma once
 
-#include <QQuickItem>
+#include <QtQuick/QQuickItem>
 #include <QtCore/QLoggingCategory>
 
 #include "FactPanelController.h"
@@ -167,5 +166,3 @@ private:
     
     static const int _supportedFirmwareCalVersion = 2;
 };
-
-#endif

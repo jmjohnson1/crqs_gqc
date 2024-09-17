@@ -9,38 +9,38 @@
 
 #pragma once
 
-#include <QApplication>
-#include <QTimer>
-#include <QElapsedTimer>
-#include <QMap>
-#include <QSet>
-#include <QMetaMethod>
-#include <QMetaObject>
-#include <QTranslator>
+#include <QtWidgets/QApplication>
+#include <QtCore/QTimer>
+#include <QtCore/QElapsedTimer>
+#include <QtCore/QMap>
+#include <QtCore/QSet>
+#include <QtCore/QEvent>
+#include <QtCore/QMetaMethod>
+#include <QtCore/QMetaObject>
+#include <QtCore/QTranslator>
 
 // These private headers are require to implement the signal compress support below
-#include <private/qthread_p.h>
-#include <private/qobject_p.h>
-
-#include "LinkConfiguration.h"
-#include "MAVLinkProtocol.h"
-#include "FlightMapSettings.h"
-#include "FirmwarePluginManager.h"
-#include "MultiVehicleManager.h"
-#include "JoystickManager.h"
-#include "AudioOutput.h"
-#include "UASMessageHandler.h"
-#include "FactSystem.h"
-#include "GPSRTKFactGroup.h"
-
-#ifdef QGC_RTLAB_ENABLED
-#include "OpalLink.h"
-#endif
+#include <QtCore/private/qthread_p.h>
+#include <QtCore/private/qobject_p.h>
 
 // Work around circular header includes
 class QQmlApplicationEngine;
-class QGCSingleton;
 class QGCToolbox;
+class QQuickWindow;
+class QGCImageProvider;
+class QGCApplication;
+
+#if defined(qApp)
+#undef qApp
+#endif
+#define qApp (static_cast<QGCApplication *>(QApplication::instance()))
+
+#if defined(qGuiApp)
+#undef qGuiApp
+#endif
+#define qGuiApp (static_cast<QGCApplication *>(QGuiApplication::instance()))
+
+#define qgcApp() qApp
 
 /**
  * @brief The main application and management class.
@@ -54,6 +54,8 @@ class QGCToolbox;
  * Note: `lastWindowClosed` will be sent by MessageBox popups and other
  * dialogs, that are spawned in QML, when they are closed
 **/
+
+// TODO: Use QtGraphs to convert to QGuiApplication
 class QGCApplication : public QApplication
 {
     Q_OBJECT
@@ -83,19 +85,12 @@ public:
     // Still working on getting rid of this and using dependency injection instead for everything
     QGCToolbox* toolbox(void) { return _toolbox; }
 
-    /// Do we have Bluetooth Support?
-    bool isBluetoothAvailable() const{ return _bluetoothAvailable; }
-
-    /// Is Internet available?
-    bool isInternetAvailable();
-
-    FactGroup* gpsRtkFactGroup(void)  { return _gpsRtkFactGroup; }
-
-    QTranslator& qgcJSONTranslator(void) { return _qgcTranslatorJSON; }
-
     void            setLanguage();
     QQuickWindow*   mainRootWindow();
     uint64_t        msecsSinceBoot(void) { return _msecsElapsedTime.elapsed(); }
+    QString         numberToString(quint64 number);
+    QString         bigSizeToString(quint64 size);
+    QString         bigSizeMBToString(quint64 size_MB);
 
     /// Registers the signal such that only the last duplicate signal added is left in the queue.
     void addCompressedSignal(const QMetaMethod & method);
@@ -122,7 +117,7 @@ public slots:
     void qmlAttemptWindowClose();
 
     /// Save the specified telemetry Log
-    void saveTelemetryLogOnMainThread(QString tempLogfile);
+    void saveTelemetryLogOnMainThread(const QString &tempLogfile);
 
     /// Check that the telemetry save path is set correctly
     void checkTelemetrySavePathOnMainThread();
@@ -140,6 +135,8 @@ public slots:
     /// one after the other.
     void showRebootAppMessage(const QString& message, const QString& title = QString());
 
+    QGCImageProvider* qgcImageProvider();
+
 signals:
     /// This is connected to MAVLinkProtocol::checkForLostLogFiles. We signal this to ourselves to call the slot
     /// on the MAVLinkProtocol thread;
@@ -148,48 +145,26 @@ signals:
     void languageChanged        (const QLocale locale);
 
 public:
-    // Although public, these methods are internal and should only be called by UnitTest code
-
     /// @brief Perform initialize which is common to both normal application running and unit tests.
-    ///         Although public should only be called by main.
-    void _initCommon();
+    void init();
+    void shutdown();
 
-    /// @brief Initialize the application for normal application boot. Or in other words we are not going to run
-    ///         unit tests. Although public should only be called by main.
-    bool _initForNormalAppBoot();
-
-    /// @brief Initialize the application for normal application boot. Or in other words we are not going to run
-    ///         unit tests. Although public should only be called by main.
-    bool _initForUnitTests();
-
-    static QGCApplication*  _app;   ///< Our own singleton. Should be reference directly by qgcApp
-
-    bool    isErrorState() const { return _error; }
-
-    QQmlApplicationEngine* qmlAppEngine() { return _qmlAppEngine; }
-
-public:
     // Although public, these methods are internal and should only be called by UnitTest code
-
-    /// Shutdown the application object
-    void _shutdown();
-
-    bool _checkTelemetrySavePath(bool useMessageBox);
+    QQmlApplicationEngine* qmlAppEngine() { return _qmlAppEngine; }
 
 private slots:
     void _missingParamsDisplay                      (void);
     void _qgcCurrentStableVersionDownloadComplete   (QString remoteFile, QString localFile, QString errorMsg);
     bool _parseVersionText                          (const QString& versionString, int& majorVersion, int& minorVersion, int& buildVersion);
-    void _onGPSConnect                              (void);
-    void _onGPSDisconnect                           (void);
-    void _gpsSurveyInStatus                         (float duration, float accuracyMM,  double latitude, double longitude, float altitude, bool valid, bool active);
-    void _gpsNumSatellites                          (int numSatellites);
     void _showDelayedAppMessages                    (void);
 
 private:
-    QObject*    _rootQmlObject          ();
-    void        _checkForNewVersion     ();
-    void        _exitWithError          (QString errorMessage);
+    /// @brief Initialize the application for normal application boot. Or in other words we are not going to run unit tests.
+    void _initForNormalAppBoot();
+
+    QObject* _rootQmlObject();
+    void _checkForNewVersion();
+    bool _checkTelemetrySavePath(bool useMessageBox);
 
     // Overrides from QApplication
     bool compressEvent(QEvent *event, QObject *receiver, QPostEventList *postedEvents) override;
@@ -206,15 +181,13 @@ private:
     int                 _majorVersion           = 0;
     int                 _minorVersion           = 0;
     int                 _buildVersion           = 0;
-    GPSRTKFactGroup*    _gpsRtkFactGroup        = nullptr;
     QGCToolbox*         _toolbox                = nullptr;
     QQuickWindow*       _mainRootWindow         = nullptr;
-    bool                _bluetoothAvailable     = false;
     QTranslator         _qgcTranslatorSourceCode;           ///< translations for source code C++/Qml
-    QTranslator         _qgcTranslatorJSON;                 ///< translations for json files
     QTranslator         _qgcTranslatorQtLibs;               ///< tranlsations for Qt libraries
     QLocale             _locale;
     bool                _error                  = false;
+    bool                _showErrorsInToolbar    = false;
     QElapsedTimer       _msecsElapsedTime;
 
     QList<QPair<QString /* title */, QString /* message */>> _delayedAppMessages;
@@ -237,12 +210,11 @@ private:
 
     CompressedSignalList _compressedSignals;
 
-    static const char* _settingsVersionKey;             ///< Settings key which hold settings version
-    static const char* _deleteAllSettingsKey;           ///< If this settings key is set on boot, all settings will be deleted
+    const QString _settingsVersionKey = QStringLiteral("SettingsVersion"); ///< Settings key which hold settings version
+    const QString _deleteAllSettingsKey = QStringLiteral("DeleteAllSettingsNextBoot"); ///< If this settings key is set on boot, all settings will be deleted
+
+    const QString qgcImageProviderId = QStringLiteral("QGCImages");
 
     /// Unit Test have access to creating and destroying singletons
     friend class UnitTest;
 };
-
-/// @brief Returns the QGCApplication object singleton.
-QGCApplication* qgcApp(void);

@@ -12,8 +12,10 @@
 #include "QGCApplication.h"
 #include "QGCCorePlugin.h"
 #include "QGC.h"
-
-const char*  InstrumentValueData::vehicleFactGroupName =   "Vehicle";
+#include "QmlObjectListModel.h"
+#include "MultiVehicleManager.h"
+#include "Vehicle.h"
+#include "FactGroup.h"
 
 // Important: The indices of these strings must match the InstrumentValueData::RangeType enum
 const QStringList InstrumentValueData::_rangeTypeNames = {

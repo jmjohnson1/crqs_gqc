@@ -8,19 +8,21 @@
  ****************************************************************************/
 
 #include "VTOLLandingComplexItem.h"
+#include "QGCApplication.h"
 #include "JsonHelper.h"
 #include "MissionController.h"
 #include "PlanMasterController.h"
 #include "FlightPathSegment.h"
+#include "MissionItem.h"
+#include "SettingsManager.h"
 #include "QGC.h"
 #include "QGCLoggingCategory.h"
+
+#include <QtCore/QJsonArray>
 
 QGC_LOGGING_CATEGORY(VTOLLandingComplexItemLog, "VTOLLandingComplexItemLog")
 
 const QString VTOLLandingComplexItem::name(VTOLLandingComplexItem::tr("VTOL Landing"));
-
-const char* VTOLLandingComplexItem::settingsGroup =            "VTOLLanding";
-const char* VTOLLandingComplexItem::jsonComplexItemTypeValue = "vtolLandingPattern";
 
 VTOLLandingComplexItem::VTOLLandingComplexItem(PlanMasterController* masterController, bool flyView)
     : LandingComplexItem        (masterController, flyView)

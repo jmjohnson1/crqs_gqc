@@ -9,28 +9,24 @@
 
 #pragma once
 
-#include<QString>
+#include <QtCore/QString>
 #include <string>
 
 #include "UTMSPRestInterface.h"
 
-class UTMSPAuthorization: public QObject, public UTMSPRestInterface
+class UTMSPAuthorization: public QObject
 {
     Q_OBJECT
 public:
-    UTMSPAuthorization();
-    ~UTMSPAuthorization();
+    UTMSPAuthorization(QObject *parent = nullptr);
+    virtual ~UTMSPAuthorization() = default;
 
     const std::string& getOAuth2Token();
 
 protected slots:
     bool requestOAuth2Client(const QString& clientID, const QString& clientSecret);
 
-protected:
-    http::request<http::string_body> _request;
-
 private:
-    std::string          _clientID;
-    std::string          _clientSecret;
     bool                 _isValidToken;
+    UTMSPRestInterface   _utmspRestInterface;
 };

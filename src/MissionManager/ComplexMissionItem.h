@@ -10,14 +10,14 @@
 #pragma once
 
 #include "VisualMissionItem.h"
-#include "QGCToolbox.h"
-#include "SettingsManager.h"
-#include "KMLPlanDomDocument.h"
 #include "QmlObjectListModel.h"
 #include "FlightPathSegment.h"
 
 class PlanMasterController;
 class MissionController;
+class KMLPlanDomDocument;
+class SettingsManager;
+class QGCToolbox;
 
 class ComplexMissionItem : public VisualMissionItem
 {
@@ -97,7 +97,7 @@ public:
     bool isIncomplete       (void) const { return _isIncomplete; }
 
     /// This mission item attribute specifies the type of the complex item.
-    static const char* jsonComplexItemTypeKey;
+    static constexpr const char* jsonComplexItemTypeKey = "complexItemType";
 
 signals:
     void complexDistanceChanged     (void);
@@ -123,10 +123,8 @@ protected:
 
     QMap<QString, FactMetaData*> _metaDataMap;
 
-    static const char* _presetSettingsKey;
-
     QGCToolbox* _toolbox;
     SettingsManager* _settingsManager;
 
-private:
+    static constexpr const char* _presetSettingsKey =        "_presets";
 };

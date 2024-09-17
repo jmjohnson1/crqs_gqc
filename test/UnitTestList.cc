@@ -7,95 +7,211 @@
  *
  ****************************************************************************/
 
+#include "UnitTestList.h"
+#include "UnitTest.h"
+#include "QGCApplication.h"
+#include "QGCLoggingCategory.h"
 
-// We keep the list of all unit tests in a global location so it's easier to see which
-// ones are enabled/disabled
+// ADSB
+#include "ADSBTest.h"
 
-#include "ComponentInformationCacheTest.h"
-#include "ComponentInformationTranslationTest.h"
+// AnalyzeView
+#include "ExifParserTest.h"
+// #include "MavlinkLogTest.h"
+// #include "LogDownloadTest.h"
+#include "PX4LogParserTest.h"
+#include "ULogParserTest.h"
+
+// Audio
+#include "AudioOutputTest.h"
+
+// AutoPilotPlugins
+// #include "RadioConfigTest.h"
+
+// Comms
+#include "QGCSerialPortInfoTest.h"
+
+// FactSystem
 #include "FactSystemTestGeneric.h"
 #include "FactSystemTestPX4.h"
-//#include "FileDialogTest.h"
-#include "GeoTest.h"
-//#include "MessageBoxTest.h"
-#include "MissionItemTest.h"
-#include "SimpleMissionItemTest.h"
-#include "SurveyComplexItemTest.h"
-#include "MissionControllerTest.h"
-#include "MissionManagerTest.h"
-//#include "RadioConfigTest.h"
-#include "MavlinkLogTest.h"
-//#include "MainWindowTest.h"
-//#include "FileManagerTest.h"
 #include "ParameterManagerTest.h"
-#include "MissionCommandTreeTest.h"
-//#include "LogDownloadTest.h"
-#include "SendMavCommandWithSignallingTest.h"
-#include "SendMavCommandWithHandlerTest.h"
-#include "VisualMissionItemTest.h"
-#include "CameraSectionTest.h"
-#include "SpeedSectionTest.h"
-#include "PlanMasterControllerTest.h"
-#include "MissionSettingsTest.h"
-#include "QGCMapPolygonTest.h"
-#include "AudioOutputTest.h"
-#include "StructureScanComplexItemTest.h"
-#include "QGCMapPolylineTest.h"
-#include "CorridorScanComplexItemTest.h"
-#include "TransectStyleComplexItemTest.h"
+
+// FollowMe
+#include "FollowMeTest.h"
+
+// Geo
+#include "GeoTest.h"
+
+// MAVLink
+#include "StatusTextHandlerTest.h"
+#include "SigningTest.h"
+
+// MissionManager
 #include "CameraCalcTest.h"
-#include "FWLandingPatternTest.h"
-#include "RequestMessageTest.h"
+#include "CameraSectionTest.h"
+#include "CorridorScanComplexItemTest.h"
+// #include "FWLandingPatternTest.h"
+// #include "LandingComplexItemTest.h"
+// #include "MissionCommandTreeEditorTest.h"
+#include "MissionCommandTreeTest.h"
+#include "MissionControllerManagerTest.h"
+#include "MissionControllerTest.h"
+#include "MissionItemTest.h"
+#include "MissionManagerTest.h"
+#include "MissionSettingsTest.h"
+#include "PlanMasterControllerTest.h"
+#include "QGCMapPolygonTest.h"
+#include "QGCMapPolylineTest.h"
+// #include "SectionTest.h"
+#include "SimpleMissionItemTest.h"
+#include "SpeedSectionTest.h"
+#include "StructureScanComplexItemTest.h"
+#include "SurveyComplexItemTest.h"
+#include "TransectStyleComplexItemTest.h"
+// #include "VisualMissionItemTest.h"
+
+// qgcunittest
+#include "ComponentInformationCacheTest.h"
+#include "ComponentInformationTranslationTest.h"
+// #include "FileDialogTest.h"
+// #include "MainWindowTest.h"
+// #include "MessageBoxTest.h"
+
+// QmlControls
+
+// Terrain
+#include "TerrainQueryTest.h"
+
+// UI
+
+// Utilities
+// Compression
+#include "DecompressionTest.h"
+
+// Vehicle
+// Components
+#include "ComponentInformationCacheTest.h"
+#include "ComponentInformationTranslationTest.h"
 #include "FTPManagerTest.h"
-#include "MissionCommandTreeEditorTest.h"
-#include "VehicleLinkManagerTest.h"
-#include "LandingComplexItemTest.h"
-#include "InitialConnectTest.h"
+// #include "InitialConnectTest.h"
+// #include "RequestMessageTest.h"
+// #include "SendMavCommandWithHandlerTest.h"
+// #include "SendMavCommandWithSignalingTest.h"
 
-UT_REGISTER_TEST(ComponentInformationCacheTest)
-UT_REGISTER_TEST(ComponentInformationTranslationTest)
-UT_REGISTER_TEST(FactSystemTestGeneric)
-UT_REGISTER_TEST(FactSystemTestPX4)
-//UT_REGISTER_TEST(FileDialogTest)
-UT_REGISTER_TEST(GeoTest)
-UT_REGISTER_TEST(VehicleLinkManagerTest)
-//UT_REGISTER_TEST(MessageBoxTest)
-UT_REGISTER_TEST(SendMavCommandWithSignallingTest)
-UT_REGISTER_TEST(SendMavCommandWithHandlerTest)
-UT_REGISTER_TEST(RequestMessageTest)
-UT_REGISTER_TEST(FTPManagerTest)
-UT_REGISTER_TEST(InitialConnectTest)
-UT_REGISTER_TEST(MissionItemTest)
-UT_REGISTER_TEST(SimpleMissionItemTest)
-UT_REGISTER_TEST(MissionControllerTest)
-UT_REGISTER_TEST(MissionManagerTest)
-//UT_REGISTER_TEST(RadioConfigTest)
-//UT_REGISTER_TEST(FileManagerTest)
-UT_REGISTER_TEST(ParameterManagerTest)
-UT_REGISTER_TEST(MissionCommandTreeTest)
-//UT_REGISTER_TEST(LogDownloadTest)
-UT_REGISTER_TEST(SurveyComplexItemTest)
-UT_REGISTER_TEST(CameraSectionTest)
-UT_REGISTER_TEST(SpeedSectionTest)
-UT_REGISTER_TEST(PlanMasterControllerTest)
-UT_REGISTER_TEST(MissionSettingsTest)
-UT_REGISTER_TEST(QGCMapPolygonTest)
-UT_REGISTER_TEST(AudioOutputTest)
-UT_REGISTER_TEST(StructureScanComplexItemTest)
-UT_REGISTER_TEST(CorridorScanComplexItemTest)
-UT_REGISTER_TEST(TransectStyleComplexItemTest)
-UT_REGISTER_TEST(QGCMapPolylineTest)
-UT_REGISTER_TEST(CameraCalcTest)
-UT_REGISTER_TEST(FWLandingPatternTest)
-UT_REGISTER_TEST(LandingComplexItemTest)
+// Missing
+// #include "FlightGearUnitTest.h"
+// #include "LinkManagerTest.h"
+// #include "SendMavCommandTest.h"
+// #include "TCPLinkTest.h"
 
-UT_REGISTER_TEST_STANDALONE(MissionCommandTreeEditorTest)
+QGC_LOGGING_CATEGORY(UnitTestsLog, "qgc.test.unittestlist")
 
-// List of unit test which are currently disabled.
-// If disabling a new test, include reason in comment.
+int runTests(bool stress, QStringView unitTestOptions)
+{
+	// ADSB
+	UT_REGISTER_TEST(ADSBTest)
 
-// FIXME: Temporarily disabled until this can be stabilized
-//UT_REGISTER_TEST(MainWindowTest)
+	// AnalyzeView
+	UT_REGISTER_TEST(ExifParserTest)
+	// UT_REGISTER_TEST(MavlinkLogTest)
+	// UT_REGISTER_TEST(LogDownloadTest)
+	UT_REGISTER_TEST(PX4LogParserTest)
+	UT_REGISTER_TEST(ULogParserTest)
 
-// Needs to be update for latest updates
-//UT_REGISTER_TEST(MavlinkLogTest)
+	// Audio
+	UT_REGISTER_TEST(AudioOutputTest)
+
+	// AutoPilotPlugins
+	// UT_REGISTER_TEST(RadioConfigTest)
+
+	// Comms
+	UT_REGISTER_TEST(QGCSerialPortInfoTest)
+
+	// FactSystem
+	UT_REGISTER_TEST(FactSystemTestGeneric)
+	UT_REGISTER_TEST(FactSystemTestPX4)
+	UT_REGISTER_TEST(ParameterManagerTest)
+
+	// FollowMe
+	UT_REGISTER_TEST(FollowMeTest)
+
+	// Geo
+    UT_REGISTER_TEST(GeoTest)
+
+    // MAVLink
+    UT_REGISTER_TEST(StatusTextHandlerTest)
+    UT_REGISTER_TEST(SigningTest)
+
+	// MissionManager
+	UT_REGISTER_TEST(CameraCalcTest)
+	UT_REGISTER_TEST(CameraSectionTest)
+	UT_REGISTER_TEST(CorridorScanComplexItemTest)
+	// UT_REGISTER_TEST(FWLandingPatternTest)
+	// UT_REGISTER_TEST(LandingComplexItemTest)
+	// UT_REGISTER_TEST_STANDALONE(MissionCommandTreeEditorTest)
+	UT_REGISTER_TEST(MissionCommandTreeTest)
+	UT_REGISTER_TEST(MissionControllerManagerTest)
+	UT_REGISTER_TEST(MissionControllerTest)
+	UT_REGISTER_TEST(MissionItemTest)
+	UT_REGISTER_TEST(MissionManagerTest)
+	UT_REGISTER_TEST(MissionSettingsTest)
+	UT_REGISTER_TEST(PlanMasterControllerTest)
+	UT_REGISTER_TEST(QGCMapPolygonTest)
+	UT_REGISTER_TEST(QGCMapPolylineTest)
+	// UT_REGISTER_TEST(SectionTest)
+	UT_REGISTER_TEST(SimpleMissionItemTest)
+	UT_REGISTER_TEST(SpeedSectionTest)
+	UT_REGISTER_TEST(StructureScanComplexItemTest)
+	UT_REGISTER_TEST(SurveyComplexItemTest)
+	UT_REGISTER_TEST(TransectStyleComplexItemTest)
+	// UT_REGISTER_TEST(VisualMissionItemTest)
+
+	// qgcunittest
+	// UT_REGISTER_TEST(FileDialogTest)
+	// UT_REGISTER_TEST(MainWindowTest)
+	// UT_REGISTER_TEST(MessageBoxTest)
+
+	// QmlControls
+
+	// Terrain
+	UT_REGISTER_TEST(TerrainQueryTest)
+
+	// UI
+
+	// Utilities
+	// Compression
+	UT_REGISTER_TEST(DecompressionTest)
+
+	// Vehicle
+	// Components
+	UT_REGISTER_TEST(ComponentInformationCacheTest)
+	UT_REGISTER_TEST(ComponentInformationTranslationTest)
+	UT_REGISTER_TEST(FTPManagerTest)
+	// UT_REGISTER_TEST(InitialConnectTest)
+	// UT_REGISTER_TEST(RequestMessageTest)
+	// UT_REGISTER_TEST(SendMavCommandWithHandlerTest)
+	// UT_REGISTER_TEST(SendMavCommandWithSignalingTest)
+
+	// Missing
+	// UT_REGISTER_TEST(FlightGearUnitTest)
+	// UT_REGISTER_TEST(LinkManagerTest)
+	// UT_REGISTER_TEST(SendMavCommandTest)
+	// UT_REGISTER_TEST(TCPLinkTest)
+
+	int result = 0;
+
+    for (int i=0; i < (stress ? 20 : 1); i++) {
+        // Run the test
+        const int failures = UnitTest::run(unitTestOptions);
+        if (failures == 0) {
+            qDebug() << "ALL TESTS PASSED";
+            result = 0;
+        } else {
+            qDebug() << failures << " TESTS FAILED!";
+            result = -failures;
+            break;
+        }
+    }
+
+    return result;
+}

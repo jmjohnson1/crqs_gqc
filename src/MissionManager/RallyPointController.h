@@ -7,19 +7,19 @@
  *
  ****************************************************************************/
 
-#ifndef RallyPointController_H
-#define RallyPointController_H
+#pragma once
 
 #include "PlanElementController.h"
-#include "RallyPointManager.h"
-#include "Vehicle.h"
 #include "QmlObjectListModel.h"
 
+#include <QtPositioning/QGeoCoordinate>
 #include <QtCore/QLoggingCategory>
 
 Q_DECLARE_LOGGING_CATEGORY(RallyPointControllerLog)
 
 class GeoFenceManager;
+class RallyPointManager;
+class Vehicle;
 
 class RallyPointController : public PlanElementController
 {
@@ -77,9 +77,7 @@ private:
     QObject*            _currentRallyPoint =    nullptr;
     bool                _itemsRequested =       false;
 
-    static const int    _jsonCurrentVersion = 2;
-    static const char*  _jsonFileTypeValue;
-    static const char*  _jsonPointsKey;
+    static constexpr int    _jsonCurrentVersion = 2;
+    static constexpr const char* _jsonFileTypeValue =  "RallyPoints";
+    static constexpr const char* _jsonPointsKey =      "points";
 };
-
-#endif

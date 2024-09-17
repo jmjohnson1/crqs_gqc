@@ -9,12 +9,13 @@
 
 #include "Actuators.h"
 #include "GeometryImage.h"
+#include "ParameterManager.h"
+#include "Vehicle.h"
 
-#include <QString>
-#include <QFile>
-#include <QtGlobal>
-#include <QJsonArray>
-#include <QJsonObject>
+#include <QtCore/QString>
+#include <QtCore/QFile>
+#include <QtCore/QJsonArray>
+#include <QtCore/QJsonObject>
 
 #include <algorithm>
 
@@ -736,11 +737,11 @@ bool Actuators::parseJson(const QJsonDocument &json)
 
 Fact* Actuators::getFact(const QString& paramName)
 {
-    if (!_vehicle->parameterManager()->parameterExists(FactSystem::defaultComponentId, paramName)) {
+    if (!_vehicle->parameterManager()->parameterExists(ParameterManager::defaultComponentId, paramName)) {
         qCDebug(ActuatorsConfigLog) << "Mixer: Param does not exist:" << paramName;
         return nullptr;
     }
-    Fact* fact = _vehicle->parameterManager()->getParameter(FactSystem::defaultComponentId, paramName);
+    Fact* fact = _vehicle->parameterManager()->getParameter(ParameterManager::defaultComponentId, paramName);
 	subscribeFact(fact);
 	return fact;
 }

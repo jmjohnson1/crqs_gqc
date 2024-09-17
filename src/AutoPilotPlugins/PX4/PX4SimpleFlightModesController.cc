@@ -9,17 +9,20 @@
 
 
 #include "PX4SimpleFlightModesController.h"
+#include "Fact.h"
+#include "Vehicle.h"
+#include "ParameterManager.h"
 
 PX4SimpleFlightModesController::PX4SimpleFlightModesController(void)
     : _activeFlightMode(0)
-    , _channelCount(Vehicle::cMaxRcChannels)
+    , _channelCount(QGCMAVLink::maxRcChannels)
 
 {
     QStringList usedParams;
     usedParams << QStringLiteral("COM_FLTMODE1") << QStringLiteral("COM_FLTMODE2") << QStringLiteral("COM_FLTMODE3")
                << QStringLiteral("COM_FLTMODE4") << QStringLiteral("COM_FLTMODE5") << QStringLiteral("COM_FLTMODE6")
                << QStringLiteral("RC_MAP_FLTMODE");
-    if (!_allParametersExists(FactSystem::defaultComponentId, usedParams)) {
+    if (!_allParametersExists(ParameterManager::defaultComponentId, usedParams)) {
         return;
     }
 
@@ -27,7 +30,7 @@ PX4SimpleFlightModesController::PX4SimpleFlightModesController(void)
 }
 
 /// Connected to Vehicle::rcChannelsChanged signal
-void PX4SimpleFlightModesController::_rcChannelsChanged(int channelCount, int pwmValues[Vehicle::cMaxRcChannels])
+void PX4SimpleFlightModesController::_rcChannelsChanged(int channelCount, int pwmValues[QGCMAVLink::maxRcChannels])
 {
     _rcChannelValues.clear();
     for (int i=0; i<channelCount; i++) {

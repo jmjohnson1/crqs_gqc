@@ -7,12 +7,12 @@
  *
  ****************************************************************************/
 
-#ifndef QGCPalette_h
-#define QGCPalette_h
+#pragma once
 
-#include <QObject>
-#include <QColor>
-#include <QMap>
+#include <QtCore/QObject>
+#include <QtGui/QColor>
+#include <QtCore/QMap>
+#include <QtQmlIntegration/QtQmlIntegration>
 
 #define DECLARE_QGC_COLOR(name, lightDisabled, lightEnabled, darkDisabled, darkEnabled) \
     { \
@@ -91,6 +91,7 @@
 class QGCPalette : public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
 
 public:
     enum ColorGroup {
@@ -155,7 +156,7 @@ public:
     DEFINE_QGC_COLOR(toolStripHoverColor,           setToolStripHoverColor)
     DEFINE_QGC_COLOR(groupBorder,                   setGroupBorder)
 
-#ifdef CONFIG_UTM_ADAPTER
+#ifdef QGC_UTM_ADAPTER
     DEFINE_QGC_COLOR(switchUTMSP,                    setSwitchUTMSP)
     DEFINE_QGC_COLOR(sliderUTMSP,                    setSliderUTMSP)
     DEFINE_QGC_COLOR(successNotifyUTMSP,             setSuccessNotifyUTMSP)
@@ -187,5 +188,3 @@ private:
     static QMap<int, QMap<int, QMap<QString, QColor>>> _colorInfoMap;   // theme -> colorGroup -> color name -> color
     static QList<QGCPalette*> _paletteObjects;    ///< List of all active QGCPalette objects
 };
-
-#endif

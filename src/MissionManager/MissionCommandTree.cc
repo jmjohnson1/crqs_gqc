@@ -11,8 +11,11 @@
 #include "Vehicle.h"
 #include "FirmwarePluginManager.h"
 #include "QGCApplication.h"
+#include "FirmwarePlugin.h"
 #include "MissionCommandUIInfo.h"
 #include "MissionCommandList.h"
+
+#include <QtQml/QtQml>
 
 MissionCommandTree::MissionCommandTree(QGCApplication* app, QGCToolbox* toolbox, bool unitTest)
     : QGCTool               (app, toolbox)
@@ -53,6 +56,8 @@ void MissionCommandTree::setToolbox(QGCToolbox* toolbox)
 #ifdef UNITTEST_BUILD
     }
 #endif
+
+    qmlRegisterUncreatableType<MissionCommandTree>("QGroundControl", 1, 0, "MissionCommandTree", "Reference only");
 }
 
 /// Add the next level of the hierarchy to a collapsed tree.

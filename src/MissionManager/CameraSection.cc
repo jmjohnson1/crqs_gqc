@@ -11,16 +11,11 @@
 #include "SimpleMissionItem.h"
 #include "FirmwarePlugin.h"
 #include "PlanMasterController.h"
+#include "MissionItem.h"
+#include "Vehicle.h"
 #include "QGCLoggingCategory.h"
 
 QGC_LOGGING_CATEGORY(CameraSectionLog, "CameraSectionLog")
-
-const char* CameraSection::_gimbalPitchName =                   "GimbalPitch";
-const char* CameraSection::_gimbalYawName =                     "GimbalYaw";
-const char* CameraSection::_cameraActionName =                  "CameraAction";
-const char* CameraSection::_cameraPhotoIntervalDistanceName =   "CameraPhotoIntervalDistance";
-const char* CameraSection::_cameraPhotoIntervalTimeName =       "CameraPhotoIntervalTime";
-const char* CameraSection::_cameraModeName =                    "CameraMode";
 
 QMap<QString, FactMetaData*> CameraSection::_metaDataMap;
 

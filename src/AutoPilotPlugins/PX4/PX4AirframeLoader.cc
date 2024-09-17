@@ -15,12 +15,14 @@
 #include "QGCApplication.h"
 #include "QGCLoggingCategory.h"
 #include "AirframeComponentAirframes.h"
+#include "AutoPilotPlugin.h"
 
 #include <QFile>
 #include <QFileInfo>
 #include <QDir>
 #include <QDebug>
 #include <QtCore/QXmlStreamReader>
+#include <QtCore/QSettings>
 
 QGC_LOGGING_CATEGORY(PX4AirframeLoaderLog, "PX4AirframeLoaderLog")
 

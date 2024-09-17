@@ -8,30 +8,36 @@
  ****************************************************************************/
 
 #include "QGroundControlQmlGlobal.h"
+#include "QGCApplication.h"
 #include "LinkManager.h"
-
-#include <QSettings>
-#include <QLineF>
-#include <QPointF>
+#include "MAVLinkProtocol.h"
+#include "ElevationMapProvider.h"
+#include "FirmwarePluginManager.h"
+#include "AppSettings.h"
+#include "PositionManager.h"
+#include "QGCMapEngineManager.h"
+#include "ADSBVehicleManager.h"
+#ifndef NO_SERIAL_LINK
+#include "GPSManager.h"
+#endif
+#include "QGCPalette.h"
 #ifdef QT_DEBUG
 #include "MockLink.h"
 #endif
 
-static const char* kQmlGlobalKeyName = "QGCQml";
-
-const char* QGroundControlQmlGlobal::_flightMapPositionSettingsGroup =          "FlightMapPosition";
-const char* QGroundControlQmlGlobal::_flightMapPositionLatitudeSettingsKey =    "Latitude";
-const char* QGroundControlQmlGlobal::_flightMapPositionLongitudeSettingsKey =   "Longitude";
-const char* QGroundControlQmlGlobal::_flightMapZoomSettingsKey =                "FlightMapZoom";
+#include <QtCore/QSettings>
+#include <QtCore/QLineF>
 
 QGeoCoordinate   QGroundControlQmlGlobal::_coord = QGeoCoordinate(0.0,0.0);
 double           QGroundControlQmlGlobal::_zoom = 2;
 
 QGroundControlQmlGlobal::QGroundControlQmlGlobal(QGCApplication* app, QGCToolbox* toolbox)
-    : QGCTool               (app, toolbox)
+    : QGCTool(app, toolbox)
+    , _mapEngineManager(QGCMapEngineManager::instance())
+    , _adsbVehicleManager(ADSBVehicleManager::instance())
 {
     // We clear the parent on this object since we run into shutdown problems caused by hybrid qml app. Instead we let it leak on shutdown.
-    setParent(nullptr);
+    // setParent(nullptr);
 
     // Load last coordinates and zoom from config file
     QSettings settings;
@@ -71,7 +77,6 @@ void QGroundControlQmlGlobal::setToolbox(QGCToolbox* toolbox)
 
     _linkManager            = toolbox->linkManager();
     _multiVehicleManager    = toolbox->multiVehicleManager();
-    _mapEngineManager       = toolbox->mapEngineManager();
     _qgcPositionManager     = toolbox->qgcPositionManager();
     _missionCommandTree     = toolbox->missionCommandTree();
     _videoManager           = toolbox->videoManager();
@@ -79,13 +84,14 @@ void QGroundControlQmlGlobal::setToolbox(QGCToolbox* toolbox)
     _corePlugin             = toolbox->corePlugin();
     _firmwarePluginManager  = toolbox->firmwarePluginManager();
     _settingsManager        = toolbox->settingsManager();
-    _gpsRtkFactGroup        = qgcApp()->gpsRtkFactGroup();
-    _adsbVehicleManager     = toolbox->adsbVehicleManager();
+#ifndef NO_SERIAL_LINK
+    _gpsRtkFactGroup        = toolbox->gpsManager()->gpsRtkFactGroup();
+#endif
     _globalPalette          = new QGCPalette(this);
 #ifndef QGC_AIRLINK_DISABLED
     _airlinkManager         = toolbox->airlinkManager();
 #endif
-#ifdef CONFIG_UTM_ADAPTER
+#ifdef QGC_UTM_ADAPTER
     _utmspManager            = toolbox->utmspManager();
 #endif
 }
@@ -190,13 +196,13 @@ void QGroundControlQmlGlobal::stopOneMockLink(void)
 
 void QGroundControlQmlGlobal::setIsVersionCheckEnabled(bool enable)
 {
-    qgcApp()->toolbox()->mavlinkProtocol()->enableVersionCheck(enable);
+    _toolbox->mavlinkProtocol()->enableVersionCheck(enable);
     emit isVersionCheckEnabledChanged(enable);
 }
 
 void QGroundControlQmlGlobal::setMavlinkSystemID(int id)
 {
-    qgcApp()->toolbox()->mavlinkProtocol()->setSystemId(id);
+    _toolbox->mavlinkProtocol()->setSystemId(id);
     emit mavlinkSystemIDChanged(id);
 }
 
@@ -261,7 +267,7 @@ void QGroundControlQmlGlobal::setFlightMapZoom(double zoom)
 
 QString QGroundControlQmlGlobal::qgcVersion(void) const
 {
-    QString versionStr = qgcApp()->applicationVersion();
+    QString versionStr = _app->applicationVersion();
     if(QSysInfo::buildAbi().contains("32"))
     {
         versionStr += QStringLiteral(" %1").arg(tr("32 bit"));
@@ -315,4 +321,54 @@ QString QGroundControlQmlGlobal::altitudeModeShortDescription(AltMode altMode)
 
     // Should never get here but makes some compilers happy
     return QString();
+}
+
+bool QGroundControlQmlGlobal::isVersionCheckEnabled()
+{
+    return _toolbox->mavlinkProtocol()->versionCheckEnabled();
+}
+
+int QGroundControlQmlGlobal::mavlinkSystemID()
+{
+    return _toolbox->mavlinkProtocol()->getSystemId();
+}
+
+QString QGroundControlQmlGlobal::elevationProviderName()
+{
+    return CopernicusElevationProvider::kProviderKey;
+}
+
+QString QGroundControlQmlGlobal::elevationProviderNotice()
+{
+    return CopernicusElevationProvider::kProviderNotice;
+}
+
+QString QGroundControlQmlGlobal::parameterFileExtension() const
+{
+    return AppSettings::parameterFileExtension;
+}
+
+QString QGroundControlQmlGlobal::missionFileExtension() const
+{
+    return AppSettings::missionFileExtension;
+}
+
+QString QGroundControlQmlGlobal::telemetryFileExtension() const
+{
+    return AppSettings::telemetryFileExtension;
+}
+
+QString QGroundControlQmlGlobal::appName()
+{
+    return _app->applicationName();
+}
+
+void QGroundControlQmlGlobal::deleteAllSettingsNextBoot()
+{
+    _app->deleteAllSettingsNextBoot();
+}
+
+void QGroundControlQmlGlobal::clearDeleteAllSettingsNextBoot()
+{
+    _app->clearDeleteAllSettingsNextBoot();
 }

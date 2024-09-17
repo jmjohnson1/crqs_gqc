@@ -14,8 +14,10 @@
 
 #include "ESP8266ComponentController.h"
 #include "ParameterManager.h"
+#include "Vehicle.h"
 #include "QGCLoggingCategory.h"
-#include <QHostAddress>
+
+#include <QtNetwork/QHostAddress>
 
 QGC_LOGGING_CATEGORY(ESP8266ComponentControllerLog, "ESP8266ComponentControllerLog")
 
@@ -49,6 +51,11 @@ ESP8266ComponentController::ESP8266ComponentController()
 ESP8266ComponentController::~ESP8266ComponentController()
 {
 
+}
+
+int ESP8266ComponentController::componentID()
+{
+    return MAV_COMP_ID_UDP_BRIDGE;
 }
 
 //-----------------------------------------------------------------------------

@@ -8,21 +8,23 @@
  ****************************************************************************/
 
 
-#ifndef SimpleMissionItem_H
-#define SimpleMissionItem_H
+#pragma once
 
 #include "VisualMissionItem.h"
 #include "MissionItem.h"
-#include "MissionCommandTree.h"
-#include "CameraSection.h"
-#include "SpeedSection.h"
 #include "QGroundControlQmlGlobal.h"
+
+class MissionCommandTree;
+class SpeedSection;
+class CameraSection;
 
 /// A SimpleMissionItem is used to represent a single MissionItem to the ui.
 class SimpleMissionItem : public VisualMissionItem
 {
     Q_OBJECT
-    
+    Q_MOC_INCLUDE("SpeedSection.h")
+    Q_MOC_INCLUDE("CameraSection.h")
+
 public:
     SimpleMissionItem(PlanMasterController* masterController, bool flyView, bool forLoad);
     SimpleMissionItem(PlanMasterController* masterController, bool flyView, const MissionItem& missionItem);
@@ -209,9 +211,27 @@ private:
     FactMetaData    _param6MetaData;
     FactMetaData    _param7MetaData;
 
-    static const char* _jsonAltitudeModeKey;
-    static const char* _jsonAltitudeKey;
-    static const char* _jsonAMSLAltAboveTerrainKey;
-};
+    static constexpr const char* _jsonAltitudeModeKey =           "AltitudeMode";
+    static constexpr const char* _jsonAltitudeKey =               "Altitude";
+    static constexpr const char* _jsonAMSLAltAboveTerrainKey =    "AMSLAltAboveTerrain";
 
-#endif
+    struct EnumInfo_s {
+        const char *    label;
+        MAV_FRAME       frame;
+    };
+
+    static constexpr const struct EnumInfo_s _rgMavFrameInfo[] = {
+        { "MAV_FRAME_GLOBAL",                   MAV_FRAME_GLOBAL },
+        { "MAV_FRAME_LOCAL_NED",                MAV_FRAME_LOCAL_NED },
+        { "MAV_FRAME_MISSION",                  MAV_FRAME_MISSION },
+        { "MAV_FRAME_GLOBAL_RELATIVE_ALT",      MAV_FRAME_GLOBAL_RELATIVE_ALT },
+        { "MAV_FRAME_LOCAL_ENU",                MAV_FRAME_LOCAL_ENU },
+        { "MAV_FRAME_GLOBAL_INT",               MAV_FRAME_GLOBAL_INT },
+        { "MAV_FRAME_GLOBAL_RELATIVE_ALT_INT",  MAV_FRAME_GLOBAL_RELATIVE_ALT_INT },
+        { "MAV_FRAME_LOCAL_OFFSET_NED",         MAV_FRAME_LOCAL_OFFSET_NED },
+        { "MAV_FRAME_BODY_NED",                 MAV_FRAME_BODY_NED },
+        { "MAV_FRAME_BODY_OFFSET_NED",          MAV_FRAME_BODY_OFFSET_NED },
+        { "MAV_FRAME_GLOBAL_TERRAIN_ALT",       MAV_FRAME_GLOBAL_TERRAIN_ALT },
+        { "MAV_FRAME_GLOBAL_TERRAIN_ALT_INT",   MAV_FRAME_GLOBAL_TERRAIN_ALT_INT },
+    };
+};

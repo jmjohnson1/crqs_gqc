@@ -13,16 +13,19 @@
 #pragma once
 
 #include "Joystick.h"
-#include "Vehicle.h"
-#include "MultiVehicleManager.h"
+
+#define SDL_MAIN_HANDLED
 
 #include <SDL.h>
+
+class MultiVehicleManager;
 
 /// @brief SDL Joystick Interface
 class JoystickSDL : public Joystick
 {
 public:
     JoystickSDL(const QString& name, int axisCount, int buttonCount, int hatCount, int index, bool isGameController, MultiVehicleManager* multiVehicleManager);
+    ~JoystickSDL();
 
     static QMap<QString, Joystick*> discover(MultiVehicleManager* _multiVehicleManager); 
     static bool init(void);

@@ -10,9 +10,10 @@
 #pragma once
 
 #include "VisualMissionItemTest.h"
-#include "FixedWingLandingComplexItem.h"
-#include "MultiSignalSpy.h"
-#include "PlanMasterController.h"
+
+class MultiSignalSpy;
+class FixedWingLandingComplexItem;
+class SimpleMissionItem;
 
 class FWLandingPatternTest : public VisualMissionItemTest
 {

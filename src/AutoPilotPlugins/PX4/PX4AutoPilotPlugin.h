@@ -8,8 +8,7 @@
  ****************************************************************************/
 
 
-#ifndef PX4AUTOPILOT_H
-#define PX4AUTOPILOT_H
+#pragma once
 
 #include "AutoPilotPlugin.h"
 #include "ActuatorComponent.h"
@@ -26,7 +25,8 @@
 #include "PX4TuningComponent.h"
 #include "PX4FlightBehavior.h"
 #include "SyslinkComponent.h"
-#include "Vehicle.h"
+
+class Vehicle;
 
 /// @file
 ///     @brief This is the PX4 specific implementation of the AutoPilot class.
@@ -65,5 +65,3 @@ protected:
 private:
     QVariantList            _components;
 };
-
-#endif

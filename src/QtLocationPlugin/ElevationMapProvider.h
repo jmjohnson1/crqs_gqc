@@ -2,37 +2,50 @@
 
 #include "MapProvider.h"
 
-#include <QString>
+static constexpr const quint32 AVERAGE_COPERNICUS_ELEV_SIZE = 2786;
 
-static const quint32 AVERAGE_AIRMAP_ELEV_SIZE = 2786;
+class ElevationProvider : public MapProvider
+{
+protected:
+    ElevationProvider(const QString &mapName, const QString &referrer, const QString &imageFormat, quint32 averageSize,
+                      QGeoMapType::MapStyle mapType)
+        : MapProvider(
+            mapName,
+            referrer,
+            imageFormat,
+            averageSize,
+            mapType) {}
 
-class ElevationProvider : public MapProvider {
-    Q_OBJECT
-  public:
-    ElevationProvider(const QString& imageFormat, quint32 averageSize,
-                      QGeoMapType::MapStyle mapType, QObject* parent = nullptr);
-
-    virtual bool _isElevationProvider() const override { return true; }
+public:
+    bool isElevationProvider() const final { return true; }
+    virtual QByteArray serialize(const QByteArray &image) const = 0;
 };
 
-// -----------------------------------------------------------
-// Airmap Elevation
+class CopernicusElevationProvider : public ElevationProvider
+{
+public:
+    CopernicusElevationProvider()
+        : ElevationProvider(
+            QStringLiteral("Copernicus Elevation"),
+            QStringLiteral("https://terrain-ce.suite.auterion.com/"),
+            QStringLiteral("bin"),
+            AVERAGE_COPERNICUS_ELEV_SIZE,
+            QGeoMapType::StreetMap) {}
 
-class CopernicusElevationProvider : public ElevationProvider {
-    Q_OBJECT
-  public:
-    CopernicusElevationProvider(QObject* parent = nullptr)
-        : ElevationProvider(QStringLiteral("bin"), AVERAGE_AIRMAP_ELEV_SIZE,
-                            QGeoMapType::StreetMap, parent) {}
+    int long2tileX(double lon, int z) const final;
+    int lat2tileY(double lat, int z) const final;
 
-    int long2tileX(const double lon, const int z) const override;
+    QGCTileSet getTileCount(int zoom, double topleftLon,
+                            double topleftLat, double bottomRightLon,
+                            double bottomRightLat) const final;
 
-    int lat2tileY(const double lat, const int z) const override;
+    QByteArray serialize(const QByteArray &image) const final;
 
-    QGCTileSet getTileCount(const int zoom, const double topleftLon,
-                            const double topleftLat, const double bottomRightLon,
-                            const double bottomRightLat) const override;
+    static constexpr const char *kProviderKey = "Copernicus Elevation";
+    static constexpr const char *kProviderNotice = "© Airbus Defence and Space GmbH";
 
-  protected:
-    QString _getURL(const int x, const int y, const int zoom, QNetworkAccessManager* networkManager) override;
+private:
+    QString _getURL(int x, int y, int zoom) const final;
+
+    const QString _mapUrl = QStringLiteral("https://terrain-ce.suite.auterion.com/api/v1/carpet?points=%1,%2,%3,%4");
 };

@@ -12,9 +12,10 @@
 /// @author Gus Grubba <gus@auterion.com>
 
 #include "ScreenToolsController.h"
-#include <QFontDatabase>
-#include <QFontMetrics>
-#include <QInputDevice>
+#include "QGCApplication.h"
+#include <QtGui/QFontDatabase>
+#include <QtGui/QFontMetrics>
+#include <QtGui/QInputDevice>
 
 #include "SettingsManager.h"
 
@@ -84,3 +85,7 @@ double ScreenToolsController::defaultFontDescent(int pointSize) const
 {
     return QFontMetrics(QFont(normalFontFamily(), pointSize)).descent();
 }
+
+#ifndef __mobile__
+bool ScreenToolsController::fakeMobile() const { return qgcApp()->fakeMobile(); }
+#endif

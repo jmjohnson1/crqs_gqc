@@ -9,11 +9,12 @@
 
 #pragma once
 
-#include <QObject>
-#include <QLoggingCategory>
 
-#include "QGCMAVLink.h"
+#include "MAVLinkLib.h"
 #include "FactMetaData.h"
+
+#include <QtCore/QObject>
+#include <QtCore/QLoggingCategory>
 
 /// @file
 ///     @author Don Gagne <don@thegagnes.com>
@@ -26,7 +27,7 @@ Q_DECLARE_LOGGING_CATEGORY(PX4ParameterMetaDataLog)
 class PX4ParameterMetaData : public QObject
 {
     Q_OBJECT
-    
+
 public:
     PX4ParameterMetaData(void);
 
@@ -43,7 +44,7 @@ private:
         XmlStateFoundGroup,
         XmlStateFoundParameter,
         XmlStateDone
-    };    
+    };
 
     QVariant _stringToTypedVariant(const QString& string, FactMetaData::ValueType_t type, bool* convertOk);
     static void _outputFileWarning(const QString& metaDataFile, const QString& error1, const QString& error2);
@@ -54,4 +55,7 @@ private:
 
     bool                                _parameterMetaDataLoaded        = false;    ///< true: parameter meta data already loaded
     FactMetaData::NameToMetaDataMap_t   _mapParameterName2FactMetaData;             ///< Maps from a parameter name to FactMetaData
+
+    static constexpr const char* kInvalidConverstion = "Internal Error: No support for string parameters";
+
 };

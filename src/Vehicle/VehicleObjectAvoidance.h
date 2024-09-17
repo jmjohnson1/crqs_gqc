@@ -9,11 +9,11 @@
 
 #pragma once
 
-#include <QObject>
-#include <QVector>
-#include <QPointF>
-
 #include "QGCMAVLink.h"
+
+#include <QtCore/QObject>
+#include <QtCore/QVector>
+#include <QtCore/QPointF>
 
 class Vehicle;
 
@@ -63,5 +63,7 @@ private:
     int             _maxDistance    = 0;
     qreal           _angleOffset    = 0;
     Vehicle*        _vehicle        = nullptr;
+
+    static constexpr const char* kColPrevParam = "CP_DIST";
 };
 

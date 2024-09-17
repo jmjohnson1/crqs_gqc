@@ -8,19 +8,20 @@
  ****************************************************************************/
 
 
-#ifndef PX4AIRFRAMELOADER_H
-#define PX4AIRFRAMELOADER_H
+#pragma once
 
-#include <QObject>
-#include <QMap>
-#include <QLoggingCategory>
+#include <QtCore/QObject>
+#include <QtCore/QMap>
+#include <QtCore/QLoggingCategory>
 
-#include "AutoPilotPlugin.h"
+class AutoPilotPlugin;
 
 /// @file PX4AirframeLoader.h
 ///     @author Lorenz Meier <lm@qgroundcontrol.org>
 
 Q_DECLARE_LOGGING_CATEGORY(PX4AirframeLoaderLog)
+
+class FactMetaData;
 
 /// Collection of Parameter Facts for PX4 AutoPilot
 
@@ -50,5 +51,3 @@ private:
     static bool _airframeMetaDataLoaded;   ///< true: parameter meta data already loaded
     static QMap<QString, FactMetaData*> _mapParameterName2FactMetaData; ///< Maps from a parameter name to FactMetaData
 };
-
-#endif // PX4AIRFRAMELOADER_H

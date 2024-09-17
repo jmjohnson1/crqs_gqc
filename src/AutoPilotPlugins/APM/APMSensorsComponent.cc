@@ -9,8 +9,8 @@
 
 
 #include "APMSensorsComponent.h"
-#include "APMAutoPilotPlugin.h"
 #include "ParameterManager.h"
+#include "Vehicle.h"
 
 // These two list must be kept in sync
 
@@ -53,9 +53,9 @@ QStringList APMSensorsComponent::setupCompleteChangedTriggerList(void) const
     // Compass triggers
     triggers << QStringLiteral("COMPASS_DEV_ID") << QStringLiteral("COMPASS_DEV_ID2") << QStringLiteral("COMPASS_DEV_ID3")
              << QStringLiteral("COMPASS_USE") << QStringLiteral("COMPASS_USE2") << QStringLiteral("COMPASS_USE3")
-             << QStringLiteral("COMPASS_OFS_X") << QStringLiteral("COMPASS_OFS_X") << QStringLiteral("COMPASS_OFS_X")
-             << QStringLiteral("COMPASS_OFS2_X") << QStringLiteral("COMPASS_OFS2_X") << QStringLiteral("COMPASS_OFS2_X")
-             << QStringLiteral("COMPASS_OFS3_X") << QStringLiteral("COMPASS_OFS3_X") << QStringLiteral("COMPASS_OFS3_X");
+             << QStringLiteral("COMPASS_OFS_X") << QStringLiteral("COMPASS_OFS_Y") << QStringLiteral("COMPASS_OFS_Z")
+             << QStringLiteral("COMPASS_OFS2_X") << QStringLiteral("COMPASS_OFS2_Y") << QStringLiteral("COMPASS_OFS2_Z")
+             << QStringLiteral("COMPASS_OFS3_X") << QStringLiteral("COMPASS_OFS3_Y") << QStringLiteral("COMPASS_OFS3_Z");
 
     // Accelerometer triggers
     triggers << QStringLiteral("INS_ACCOFFS_X") << QStringLiteral("INS_ACCOFFS_Y") << QStringLiteral("INS_ACCOFFS_Z");
@@ -88,10 +88,10 @@ bool APMSensorsComponent::compassSetupNeeded(void) const
     rgOffsets[2] << QStringLiteral("COMPASS_OFS3_X") << QStringLiteral("COMPASS_OFS3_Y") << QStringLiteral("COMPASS_OFS3_Z");
 
     for (size_t i=0; i<cCompass; i++) {
-        if (_vehicle->parameterManager()->getParameter(FactSystem::defaultComponentId, rgDevicesIds[i])->rawValue().toInt() != 0 &&
-            _vehicle->parameterManager()->getParameter(FactSystem::defaultComponentId, rgCompassUse[i])->rawValue().toInt() != 0) {
+        if (_vehicle->parameterManager()->getParameter(ParameterManager::defaultComponentId, rgDevicesIds[i])->rawValue().toInt() != 0 &&
+            _vehicle->parameterManager()->getParameter(ParameterManager::defaultComponentId, rgCompassUse[i])->rawValue().toInt() != 0) {
             for (size_t j=0; j<cOffset; j++) {
-                if (_vehicle->parameterManager()->getParameter(FactSystem::defaultComponentId, rgOffsets[i][j])->rawValue().toFloat() == 0.0f) {
+                if (_vehicle->parameterManager()->getParameter(ParameterManager::defaultComponentId, rgOffsets[i][j])->rawValue().toFloat() == 0.0f) {
                     return true;
                 }
             }
@@ -111,7 +111,7 @@ bool APMSensorsComponent::accelSetupNeeded(void) const
 
     int zeroCount = 0;
     for (int i=0; i<rgOffsets.count(); i++) {
-        if (_vehicle->parameterManager()->getParameter(FactSystem::defaultComponentId, rgOffsets[i])->rawValue().toFloat() == 0.0f) {
+        if (_vehicle->parameterManager()->getParameter(ParameterManager::defaultComponentId, rgOffsets[i])->rawValue().toFloat() == 0.0f) {
             zeroCount++;
         }
     }

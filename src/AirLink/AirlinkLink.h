@@ -1,8 +1,8 @@
-#ifndef AIRLINKLINK_H
-#define AIRLINKLINK_H
+#pragma once
 
-#include <UDPLink.h>
-#include <QMutex>
+#include <QtCore/QMutex>
+
+#include "UDPLink.h"
 
 class AirlinkConfiguration : public UDPConfiguration
 {
@@ -78,5 +78,3 @@ private:
     /// Access this varible only with _mutex locked
     bool _needToConnect {false};
 };
-
-#endif // AIRLINKLINK_H

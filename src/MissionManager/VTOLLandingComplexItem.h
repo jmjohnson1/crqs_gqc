@@ -10,7 +10,6 @@
 #pragma once
 
 #include "LandingComplexItem.h"
-#include "MissionItem.h"
 #include "Fact.h"
 
 #include <QtCore/QLoggingCategory>
@@ -19,6 +18,7 @@ Q_DECLARE_LOGGING_CATEGORY(VTOLLandingComplexItemLog)
 
 class VTOLLandingPatternTest;
 class PlanMasterController;
+class MissionItem;
 
 class VTOLLandingComplexItem : public LandingComplexItem
 {
@@ -40,9 +40,8 @@ public:
 
     static const QString name;
 
-    static const char* jsonComplexItemTypeValue;
-
-    static const char* settingsGroup;
+    static constexpr const char* settingsGroup =            "VTOLLanding";
+    static constexpr const char* jsonComplexItemTypeValue = "vtolLandingPattern";
 
 private slots:
     void _updateFlightPathSegmentsDontCallDirectly(void) override;

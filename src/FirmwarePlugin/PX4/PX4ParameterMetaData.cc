@@ -14,12 +14,10 @@
 #include "PX4ParameterMetaData.h"
 #include "QGCLoggingCategory.h"
 
-#include <QFile>
-#include <QDir>
-#include <QDebug>
-#include <QXmlStreamReader>
-
-static const char* kInvalidConverstion = "Internal Error: No support for string parameters";
+#include <QtCore/QFile>
+#include <QtCore/QDir>
+#include <QtCore/QDebug>
+#include <QtCore/QXmlStreamReader>
 
 QGC_LOGGING_CATEGORY(PX4ParameterMetaDataLog, "PX4ParameterMetaDataLog")
 

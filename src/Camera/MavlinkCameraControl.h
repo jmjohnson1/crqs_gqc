@@ -10,15 +10,15 @@
 #pragma once
 
 #include "FactGroup.h"
-#include "QmlObjectListModel.h"
 
-#include <QObject>
-#include <QSizeF>
-#include <QRectF>
-#include <QPointF>
+#include <QtCore/QObject>
+#include <QtCore/QSizeF>
+#include <QtCore/QRectF>
+#include <QtCore/QPointF>
 #include <QtCore/QLoggingCategory>
 
 class QGCCameraParamIO;
+class QmlObjectListModel;
 
 Q_DECLARE_LOGGING_CATEGORY(CameraControlLog)
 Q_DECLARE_LOGGING_CATEGORY(CameraControlVerboseLog)
@@ -29,7 +29,7 @@ Q_DECLARE_LOGGING_CATEGORY(CameraControlVerboseLog)
 class QGCVideoStreamInfo : public QObject
 {
     Q_OBJECT
-
+    Q_MOC_INCLUDE("QmlObjectListModel.h")
 public:
     QGCVideoStreamInfo(QObject* parent, const mavlink_video_stream_information_t* si);
 
@@ -41,8 +41,8 @@ public:
     Q_PROPERTY(qreal        hfov                READ hfov               NOTIFY infoChanged)
     Q_PROPERTY(bool         isThermal           READ isThermal          NOTIFY infoChanged)
 
-    QString uri             () { return QString(_streamInfo.uri);  }
-    QString name            () { return QString(_streamInfo.name); }
+    QString uri             () const { return QString(_streamInfo.uri);  }
+    QString name            () const { return QString(_streamInfo.name); }
     qreal   aspectRatio     () const;
     qreal   hfov            () const{ return _streamInfo.hfov; }
     int     type            () const{ return _streamInfo.type; }

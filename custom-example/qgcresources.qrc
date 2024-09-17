@@ -38,7 +38,6 @@
 		<file alias="Play">../resources/Play.svg</file>
 		<file alias="PowerButton">../resources/PowerButton.svg</file>
 		<file alias="QGCLogoBlack">../resources/QGCLogoBlack.svg</file>
-		<file alias="QGCLogoFull">../resources/QGCLogoFull.svg</file>
 		<file alias="QGCLogoWhite">../resources/QGCLogoWhite.svg</file>
 		<file alias="QGCLogoArrow">../resources/QGCLogoArrow.svg</file>
 		<file alias="QGroundControlConnect">../resources/QGroundControlConnect.svg</file>
@@ -58,7 +57,6 @@
 		<file alias="Gripper.svg">../resources/Gripper.svg</file>
 		<file alias="GripperRelease.svg">../resources/GripperRelease.svg</file>
 		<file alias="GripperGrab.svg">../resources/GripperGrab.svg</file>
-		<file>../resources/icons/qgroundcontrol.ico</file>
 	</qresource>
 	<qresource prefix="/res/firmware">
 		<file alias="3drradio.png">../resources/firmware/3drradio.png</file>
@@ -107,5 +105,8 @@
 	</qresource>
 	<qresource prefix="/opengl">
 		<file>../resources/opengl/buglist.json</file>
+	</qresource>
+	<qresource prefix="/gimbal">
+		<file alias="payload.svg">../resources/gimbal/payload.svg</file>
 	</qresource>
 </RCC>

@@ -8,8 +8,10 @@
  ****************************************************************************/
 
 #include "QGCMapPolygonTest.h"
-#include "QGCApplication.h"
+#include "QGCMapPolygon.h"
 #include "QGCQGeoCoordinate.h"
+#include "MultiSignalSpy.h"
+#include "QmlObjectListModel.h"
 
 QGCMapPolygonTest::QGCMapPolygonTest(void)
 {
@@ -45,6 +47,7 @@ void QGCMapPolygonTest::init(void)
 
 void QGCMapPolygonTest::cleanup(void)
 {
+    UnitTest::cleanup();
     delete _mapPolygon;
     delete _multiSpyPolygon;
     delete _multiSpyModel;

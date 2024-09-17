@@ -10,12 +10,12 @@
 #pragma once
 
 #include "Fact.h"
-#include "QmlObjectListModel.h"
 #include "FactValueGrid.h"
 
-#include <QObject>
+#include <QtCore/QObject>
 
 class Vehicle;
+class QmlObjectListModel;
 
 class InstrumentValueData : public QObject
 {
@@ -80,8 +80,7 @@ public:
     void            setRangeIcons           (const QVariantList& rangeIcons);
     void            setRangeOpacities       (const QVariantList& rangeOpacities);
 
-
-    static const char*  vehicleFactGroupName;
+    static constexpr const char*  vehicleFactGroupName =   "Vehicle";
 
 signals:
     void factChanged            (Fact* fact);

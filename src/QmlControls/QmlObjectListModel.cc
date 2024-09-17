@@ -13,11 +13,8 @@
 
 #include "QmlObjectListModel.h"
 
-#include <QDebug>
-#include <QQmlEngine>
-
-const int QmlObjectListModel::ObjectRole = Qt::UserRole;
-const int QmlObjectListModel::TextRole = Qt::UserRole + 1;
+#include <QtCore/QDebug>
+#include <QtQml/QQmlEngine>
 
 QmlObjectListModel::QmlObjectListModel(QObject* parent)
     : QAbstractListModel        (parent)

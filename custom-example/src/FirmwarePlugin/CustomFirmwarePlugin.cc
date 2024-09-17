@@ -13,6 +13,7 @@
 
 #include "CustomFirmwarePlugin.h"
 #include "CustomAutoPilotPlugin.h"
+#include "Vehicle.h"
 
 //-----------------------------------------------------------------------------
 CustomFirmwarePlugin::CustomFirmwarePlugin()
@@ -20,7 +21,7 @@ CustomFirmwarePlugin::CustomFirmwarePlugin()
     for (int i = 0; i < _flightModeInfoList.count(); i++) {
         FlightModeInfo_t& info = _flightModeInfoList[i];
         //-- Narrow the flight mode options to only these
-        if (info.name != _holdFlightMode && info.name != _rtlFlightMode && info.name != _missionFlightMode) {
+        if (*info.name != _holdFlightMode && *info.name != _rtlFlightMode && *info.name != _missionFlightMode) {
             // No other flight modes can be set
             info.canBeSet = false;
         }

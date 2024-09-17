@@ -11,41 +11,57 @@
 
 #include "MapProvider.h"
 
-class EsriMapProvider : public MapProvider {
-    Q_OBJECT
+class EsriMapProvider : public MapProvider
+{
+protected:
+    EsriMapProvider(const QString &mapName, const QString &mapTypeId, quint32 averageSize, QGeoMapType::MapStyle mapType)
+        : MapProvider(
+            mapName,
+            QStringLiteral(""),
+            QStringLiteral(""),
+            averageSize,
+            mapType)
+        , _mapTypeId(mapTypeId) {}
 
-  public:
-    EsriMapProvider(const quint32 averageSize, const QGeoMapType::MapStyle mapType, QObject* parent = nullptr);
+public:
+    QByteArray getToken() const final;
 
-    QNetworkRequest getTileURL(const int x, const int y, const int zoom, QNetworkAccessManager* networkManager) override;
+private:
+    QString _getURL(int x, int y, int zoom) const final;
+
+    const QString _mapTypeId;
+    const QString _mapUrl = QStringLiteral("http://services.arcgisonline.com/ArcGIS/rest/services/%1/MapServer/tile/%2/%3/%4");
 };
 
-class EsriWorldStreetMapProvider : public EsriMapProvider {
-    Q_OBJECT
-
-  public:
-    EsriWorldStreetMapProvider(QObject* parent = nullptr)
-        : EsriMapProvider(AVERAGE_TILE_SIZE, QGeoMapType::StreetMap, parent) {}
-
-    QString _getURL(const int x, const int y, const int zoom, QNetworkAccessManager* networkManager) override;
+class EsriWorldStreetMapProvider : public EsriMapProvider
+{
+public:
+    EsriWorldStreetMapProvider()
+        : EsriMapProvider(
+            QStringLiteral("Esri World Street"),
+            QStringLiteral("World_Street_Map"),
+            AVERAGE_TILE_SIZE,
+            QGeoMapType::StreetMap) {}
 };
 
-class EsriWorldSatelliteMapProvider : public EsriMapProvider {
-    Q_OBJECT
-
-  public:
-    EsriWorldSatelliteMapProvider(QObject* parent = nullptr)
-        : EsriMapProvider(AVERAGE_TILE_SIZE, QGeoMapType::SatelliteMapDay, parent) {}
-
-    QString _getURL(const int x, const int y, const int zoom, QNetworkAccessManager* networkManager) override;
+class EsriWorldSatelliteMapProvider : public EsriMapProvider
+{
+public:
+    EsriWorldSatelliteMapProvider()
+        : EsriMapProvider(
+            QStringLiteral("Esri World Satellite"),
+            QStringLiteral("World_Imagery"),
+            AVERAGE_TILE_SIZE,
+            QGeoMapType::SatelliteMapDay) {}
 };
 
-class EsriTerrainMapProvider : public EsriMapProvider {
-    Q_OBJECT
-
-  public:
-    EsriTerrainMapProvider(QObject* parent = nullptr)
-        : EsriMapProvider(AVERAGE_TILE_SIZE, QGeoMapType::TerrainMap, parent) {}
-
-    QString _getURL(const int x, const int y, const int zoom, QNetworkAccessManager* networkManager) override;
+class EsriTerrainMapProvider : public EsriMapProvider
+{
+public:
+    EsriTerrainMapProvider()
+        : EsriMapProvider(
+            QStringLiteral("Esri Terrain"),
+            QStringLiteral("World_Terrain_Base"),
+            AVERAGE_TILE_SIZE,
+            QGeoMapType::TerrainMap) {}
 };

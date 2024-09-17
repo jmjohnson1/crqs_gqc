@@ -10,6 +10,7 @@
 #pragma once
 
 #include "MavlinkCameraControl.h"
+#include "QmlObjectListModel.h"
 
 class QNetworkAccessManager;
 class QDomNode;
@@ -156,14 +157,56 @@ public:
     virtual bool    incomingParameter   (Fact* pFact, QVariant& newValue);
     virtual bool    validateParameter   (Fact* pFact, QVariant& newValue);
 
+    static constexpr const char* kCondition       = "condition";
+    static constexpr const char* kControl         = "control";
+    static constexpr const char* kDefault         = "default";
+    static constexpr const char* kDefnition       = "definition";
+    static constexpr const char* kDescription     = "description";
+    static constexpr const char* kExclusion       = "exclude";
+    static constexpr const char* kExclusions      = "exclusions";
+    static constexpr const char* kLocale          = "locale";
+    static constexpr const char* kLocalization    = "localization";
+    static constexpr const char* kMax             = "max";
+    static constexpr const char* kMin             = "min";
+    static constexpr const char* kModel           = "model";
+    static constexpr const char* kName            = "name";
+    static constexpr const char* kOption          = "option";
+    static constexpr const char* kOptions         = "options";
+    static constexpr const char* kOriginal        = "original";
+    static constexpr const char* kParameter       = "parameter";
+    static constexpr const char* kParameterrange  = "parameterrange";
+    static constexpr const char* kParameterranges = "parameterranges";
+    static constexpr const char* kParameters      = "parameters";
+    static constexpr const char* kReadOnly        = "readonly";
+    static constexpr const char* kWriteOnly       = "writeonly";
+    static constexpr const char* kRoption         = "roption";
+    static constexpr const char* kStep            = "step";
+    static constexpr const char* kDecimalPlaces   = "decimalPlaces";
+    static constexpr const char* kStrings         = "strings";
+    static constexpr const char* kTranslated      = "translated";
+    static constexpr const char* kType            = "type";
+    static constexpr const char* kUnit            = "unit";
+    static constexpr const char* kUpdate          = "update";
+    static constexpr const char* kUpdates         = "updates";
+    static constexpr const char* kValue           = "value";
+    static constexpr const char* kVendor          = "vendor";
+    static constexpr const char* kVersion         = "version";
+
+    static constexpr const char* kPhotoMode       = "PhotoCaptureMode";
+    static constexpr const char* kPhotoLapse      = "PhotoLapse";
+    static constexpr const char* kPhotoLapseCount = "PhotoLapseCount";
+    static constexpr const char* kThermalOpacity  = "ThermalOpacity";
+    static constexpr const char* kThermalMode     = "ThermalMode";
+
+    //-----------------------------------------------------------------------------
     // Known Parameters
-    static const char* kCAM_EV;
-    static const char* kCAM_EXPMODE;
-    static const char* kCAM_ISO;
-    static const char* kCAM_SHUTTERSPD;
-    static const char* kCAM_APERTURE;
-    static const char* kCAM_WBMODE;
-    static const char* kCAM_MODE;
+    static constexpr const char* kCAM_EV          = "CAM_EV";
+    static constexpr const char* kCAM_EXPMODE     = "CAM_EXPMODE";
+    static constexpr const char* kCAM_ISO         = "CAM_ISO";
+    static constexpr const char* kCAM_SHUTTERSPD  = "CAM_SHUTTERSPD";
+    static constexpr const char* kCAM_APERTURE    = "CAM_APERTURE";
+    static constexpr const char* kCAM_WBMODE      = "CAM_WBMODE";
+    static constexpr const char* kCAM_MODE        = "CAM_MODE";
 
 protected:
     virtual void    _setVideoStatus         (VideoCaptureStatus status);
@@ -186,7 +229,7 @@ protected slots:
     virtual void    _mavCommandResult       (int vehicleId, int component, int command, int result, bool noReponseFromVehicle);
     virtual void    _dataReady              (QByteArray data);
     virtual void    _paramDone              ();
-    virtual void    _streamTimeout          ();
+    virtual void    _streamInfoTimeout      ();
     virtual void    _streamStatusTimeout    ();
     virtual void    _recTimerHandler        ();
     virtual void    _checkForVideoStreams   ();
@@ -243,6 +286,7 @@ protected:
     QMap<QString, QStringList>          _originalOptNames;
     QMap<QString, QVariantList>         _originalOptValues;
     QMap<QString, QGCCameraParamIO*>    _paramIO;
+    int                                 _cameraSettingsRetries = 0;
     int                                 _storageInfoRetries = 0;
     int                                 _captureInfoRetries = 0;
     bool                                _resetting          = false;
@@ -253,6 +297,8 @@ protected:
     QMap<QString, QStringList>          _requestUpdates;
     QStringList                         _updatesToRequest;
     //-- Video Streams
+    int                                 _videoStreamInfoRetries   = 0;
+    int                                 _videoStreamStatusRetries = 0;
     int                                 _requestCount       = 0;
     int                                 _currentStream      = 0;
     int                                 _expectedCount      = 1;

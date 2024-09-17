@@ -9,40 +9,40 @@
 
 
 #include "JoystickManager.h"
-#include "QGCApplication.h"
-#include "QGCLoggingCategory.h"
-
-#include <QQmlEngine>
-
-#ifndef __mobile__
+#include "MultiVehicleManager.h"
+#include "Joystick.h"
+#if !defined(__mobile__) || defined(QGC_SDL_JOYSTICK)
     #include "JoystickSDL.h"
     #define __sdljoystick__
-#endif
-
-#ifdef Q_OS_ANDROID
+#elif defined(Q_OS_ANDROID)
     #include "JoystickAndroid.h"
 #endif
+#include "QGCLoggingCategory.h"
+
+#include <QtCore/QSettings>
+#include <QtQml/QQmlEngine>
+#include <QtQml/QtQml>
 
 QGC_LOGGING_CATEGORY(JoystickManagerLog, "JoystickManagerLog")
-
-const char * JoystickManager::_settingsGroup =              "JoystickManager";
-const char * JoystickManager::_settingsKeyActiveJoystick =  "ActiveJoystick";
 
 JoystickManager::JoystickManager(QGCApplication* app, QGCToolbox* toolbox)
     : QGCTool(app, toolbox)
     , _activeJoystick(nullptr)
     , _multiVehicleManager(nullptr)
 {
+    // qCDebug(JoystickManagerLog) << Q_FUNC_INFO << this;
 }
 
-JoystickManager::~JoystickManager() {
+JoystickManager::~JoystickManager()
+{
     QMap<QString, Joystick*>::iterator i;
     for (i = _name2JoystickMap.begin(); i != _name2JoystickMap.end(); ++i) {
         qCDebug(JoystickManagerLog) << "Releasing joystick:" << i.key();
         i.value()->stop();
         delete i.value();
     }
-    qDebug() << "Done";
+
+    // qCDebug(JoystickManagerLog) << Q_FUNC_INFO << this;
 }
 
 void JoystickManager::setToolbox(QGCToolbox *toolbox)
@@ -52,6 +52,8 @@ void JoystickManager::setToolbox(QGCToolbox *toolbox)
     _multiVehicleManager = _toolbox->multiVehicleManager();
 
     QQmlEngine::setObjectOwnership(this, QQmlEngine::CppOwnership);
+    qmlRegisterUncreatableType<JoystickManager>("QGroundControl.JoystickManager", 1, 0, "JoystickManager", "Reference only");
+    qmlRegisterUncreatableType<Joystick>       ("QGroundControl.JoystickManager", 1, 0, "Joystick",        "Reference only");
 }
 
 void JoystickManager::init() {

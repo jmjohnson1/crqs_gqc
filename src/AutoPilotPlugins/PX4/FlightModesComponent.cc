@@ -13,6 +13,7 @@
 
 #include "FlightModesComponent.h"
 #include "ParameterManager.h"
+#include "Vehicle.h"
 
 struct SwitchListItem {
     const char* param;
@@ -51,7 +52,7 @@ bool FlightModesComponent::setupComplete(void) const
         return true;
     }
 
-    if (_vehicle->parameterManager()->parameterExists(FactSystem::defaultComponentId, "RC_MAP_FLTMODE") && _vehicle->parameterManager()->getParameter(FactSystem::defaultComponentId, "RC_MAP_FLTMODE")->rawValue().toInt() != 0) {
+    if (_vehicle->parameterManager()->parameterExists(ParameterManager::defaultComponentId, "RC_MAP_FLTMODE") && _vehicle->parameterManager()->getParameter(ParameterManager::defaultComponentId, "RC_MAP_FLTMODE")->rawValue().toInt() != 0) {
         return true;
     }
 

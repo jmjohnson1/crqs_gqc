@@ -8,44 +8,19 @@
  ****************************************************************************/
 
 #include "LandingComplexItem.h"
+#include "QGCApplication.h"
 #include "JsonHelper.h"
 #include "MissionController.h"
 #include "SimpleMissionItem.h"
 #include "PlanMasterController.h"
 #include "TakeoffMissionItem.h"
+#include "MissionItem.h"
+#include "Fact.h"
+#include "CameraSection.h"
+#include "Vehicle.h"
 #include "QGCLoggingCategory.h"
 
 QGC_LOGGING_CATEGORY(LandingComplexItemLog, "LandingComplexItemLog")
-
-const char* LandingComplexItem::_jsonFinalApproachCoordinateKey = "landingApproachCoordinate";
-const char* LandingComplexItem::_jsonLoiterRadiusKey            = "loiterRadius";
-const char* LandingComplexItem::_jsonLoiterClockwiseKey         = "loiterClockwise";
-const char* LandingComplexItem::_jsonLandingCoordinateKey       = "landCoordinate";
-const char* LandingComplexItem::_jsonAltitudesAreRelativeKey    = "altitudesAreRelative";
-const char* LandingComplexItem::_jsonUseLoiterToAltKey          = "useLoiterToAlt";
-const char* LandingComplexItem::_jsonStopTakingPhotosKey        = "stopTakingPhotos";
-const char* LandingComplexItem::_jsonStopTakingVideoKey         = "stopVideoPhotos";
-
-const char* LandingComplexItem::finalApproachToLandDistanceName = "LandingDistance";
-const char* LandingComplexItem::landingHeadingName              = "LandingHeading";
-const char* LandingComplexItem::finalApproachAltitudeName       = "FinalApproachAltitude";
-const char* LandingComplexItem::loiterRadiusName                = "LoiterRadius";
-const char* LandingComplexItem::loiterClockwiseName             = "LoiterClockwise";
-const char* LandingComplexItem::landingAltitudeName             = "LandingAltitude";
-const char* LandingComplexItem::useLoiterToAltName              = "UseLoiterToAlt";
-const char* LandingComplexItem::stopTakingPhotosName            = "StopTakingPhotos";
-const char* LandingComplexItem::stopTakingVideoName             = "StopTakingVideo";
-
-// Deprecated keys
-
-// Support for separate relative alt settings for land/loiter was removed. It now only has a single
-// relative alt setting stored in _jsonAltitudesAreRelativeKey.
-const char* LandingComplexItem::_jsonDeprecatedLandingAltitudeRelativeKey   = "landAltitudeRelative";
-const char* LandingComplexItem::_jsonDeprecatedLoiterAltitudeRelativeKey    = "loiterAltitudeRelative";
-
-// Name changed from _jsonDeprecatedLoiterCoordinateKey to _jsonFinalApproachCoordinateKey to reflect
-// the new support for using either a loiter or just a waypoint as the approach entry point.
-const char* LandingComplexItem::_jsonDeprecatedLoiterCoordinateKey          = "loiterCoordinate";
 
 LandingComplexItem::LandingComplexItem(PlanMasterController* masterController, bool flyView)
     : ComplexMissionItem        (masterController, flyView)
@@ -629,7 +604,7 @@ bool LandingComplexItem::_load(const QJsonObject& complexObject, int sequenceNum
     QString itemType = complexObject[VisualMissionItem::jsonTypeKey].toString();
     QString complexType = complexObject[ComplexMissionItem::jsonComplexItemTypeKey].toString();
     if (itemType != VisualMissionItem::jsonTypeComplexItemValue || complexType != jsonComplexItemTypeValue) {
-        errorString = tr("%1 does not support loading this complex mission item type: %2:%3").arg(qgcApp()->applicationName()).arg(itemType).arg(complexType);
+        errorString = tr("%1 does not support loading this complex mission item type: %2:%3").arg(QCoreApplication::applicationName()).arg(itemType).arg(complexType);
         return false;
     }
 

@@ -9,8 +9,8 @@
 
 #pragma once
 
-#include "QGCMAVLink.h"
-#include <QLoggingCategory>
+#include "MAVLinkLib.h"
+#include <QtCore/QLoggingCategory>
 
 class MavlinkCameraControl;
 class Fact;

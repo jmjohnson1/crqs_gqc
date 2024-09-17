@@ -7,11 +7,10 @@
  *
  ****************************************************************************/
 
-#ifndef RallyPoint_H
-#define RallyPoint_H
+#pragma once
 
-#include <QObject>
-#include <QGeoCoordinate>
+#include <QtCore/QObject>
+#include <QtPositioning/QGeoCoordinate>
 
 #include "Fact.h"
 
@@ -61,9 +60,7 @@ private:
 
     static QMap<QString, FactMetaData*> _metaDataMap;
 
-    static const char* _longitudeFactName;
-    static const char* _latitudeFactName;
-    static const char* _altitudeFactName;
+    static constexpr const char* _longitudeFactName =    "Longitude";
+    static constexpr const char* _latitudeFactName =     "Latitude";
+    static constexpr const char* _altitudeFactName =     "RelativeAltitude";
 };
-
-#endif

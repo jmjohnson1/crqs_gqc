@@ -9,16 +9,13 @@
 
 #pragma once
 
-#include <QObject>
-#include <QtTest>
-#include <QMessageBox>
-#include <QFileDialog>
-
-#include "QGCMAVLink.h"
-#include "LinkInterface.h"
-#include "Fact.h"
-#include "MissionItem.h"
 #include "MockLink.h"
+#include "MAVLinkLib.h"
+
+#include <QtCore/QObject>
+#include <QtWidgets/QFileDialog>
+#include <QtWidgets/QMessageBox>
+#include <QtPositioning/QGeoCoordinate>
 
 #define UT_REGISTER_TEST(className)             static UnitTestWrapper<className> className(#className, false);
 #define UT_REGISTER_TEST_STANDALONE(className)  static UnitTestWrapper<className> className(#className, true);  // Test will only be run with specifically called to from command line
@@ -26,8 +23,10 @@
 class QGCMessageBox;
 class QGCQFileDialog;
 class LinkManager;
-class MockLink;
 class Vehicle;
+class Fact;
+class LinkInterface;
+class MissionItem;
 
 class UnitTest : public QObject
 {
@@ -39,7 +38,7 @@ public:
 
     /// @brief Called to run all the registered unit tests
     ///     @param singleTest Name of test to just run a single test
-    static int run(QString& singleTest);
+    static int run(QStringView singleTest);
 
     /// @brief Sets up for an expected QGCMessageBox
     ///     @param response Response to take on message box

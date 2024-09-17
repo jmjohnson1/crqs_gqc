@@ -9,12 +9,10 @@
 
 #include "RCToParamDialogController.h"
 #include "QGCApplication.h"
+#include "QGCToolbox.h"
 #include "ParameterManager.h"
-
-const char*  RCToParamDialogController::_scaleFactName =    "Scale";
-const char*  RCToParamDialogController::_centerFactName =   "CenterValue";
-const char*  RCToParamDialogController::_minFactName =      "MinValue";
-const char*  RCToParamDialogController::_maxFactName =      "MaxValue";
+#include "MultiVehicleManager.h"
+#include "Vehicle.h"
 
 QMap<QString, FactMetaData*> RCToParamDialogController::_metaDataMap;
 
@@ -44,7 +42,7 @@ void RCToParamDialogController::setTuningFact(Fact* tuningFact)
     _maxFact.setRawValue(_tuningFact->rawMax().toDouble());
 
     connect(_tuningFact, &Fact::vehicleUpdated, this, &RCToParamDialogController::_parameterUpdated);
-    qgcApp()->toolbox()->multiVehicleManager()->activeVehicle()->parameterManager()->refreshParameter(FactSystem::defaultComponentId, _tuningFact->name());
+    qgcApp()->toolbox()->multiVehicleManager()->activeVehicle()->parameterManager()->refreshParameter(ParameterManager::defaultComponentId, _tuningFact->name());
 }
 
 void RCToParamDialogController::_parameterUpdated(void)

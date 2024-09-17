@@ -7,8 +7,8 @@
  *
  ****************************************************************************/
 
-#ifndef SettingsGroup_H
-#define SettingsGroup_H
+#pragma once
+
 
 #include "SettingsFact.h"
 
@@ -70,6 +70,7 @@ protected:
     QString         _settingsGroup;
 
     QMap<QString, FactMetaData*> _nameToMetaDataMap;
-};
 
-#endif
+private:
+    static constexpr const char* kJsonFile = ":/json/%1.SettingsGroup.json";
+};

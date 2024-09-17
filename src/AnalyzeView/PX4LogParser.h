@@ -1,20 +1,13 @@
-#ifndef PX4LOGPARSER_H
-#define PX4LOGPARSER_H
+#pragma once
 
-#include <QGeoCoordinate>
-#include <QDebug>
+#include <QtCore/QByteArray>
+#include <QtCore/QList>
+#include <QtCore/QLoggingCategory>
 
-#include "GeoTagController.h"
+#include "GeoTagWorker.h"
 
-class PX4LogParser
-{
-public:
-    PX4LogParser();
-    ~PX4LogParser();
-    bool getTagsFromLog(QByteArray& log, QList<GeoTagWorker::cameraFeedbackPacket>& cameraFeedback);
+Q_DECLARE_LOGGING_CATEGORY(PX4LogParserLog)
 
-private:
-
-};
-
-#endif // PX4LOGPARSER_H
+namespace PX4LogParser {
+    bool getTagsFromLog(const QByteArray &log, QList<GeoTagWorker::cameraFeedbackPacket> &cameraFeedback);
+}

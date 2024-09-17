@@ -8,8 +8,10 @@
  ****************************************************************************/
 
 #include "QGCMapPolylineTest.h"
-#include "QGCApplication.h"
 #include "QGCQGeoCoordinate.h"
+#include "MultiSignalSpy.h"
+#include "QGCMapPolyline.h"
+#include "QmlObjectListModel.h"
 
 QGCMapPolylineTest::QGCMapPolylineTest(void)
 {
@@ -44,6 +46,7 @@ void QGCMapPolylineTest::init(void)
 
 void QGCMapPolylineTest::cleanup(void)
 {
+    UnitTest::cleanup();
     delete _mapPolyline;
     delete _multiSpyPolyline;
     delete _multiSpyModel;
