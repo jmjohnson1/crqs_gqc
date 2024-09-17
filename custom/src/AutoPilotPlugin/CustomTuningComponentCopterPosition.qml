@@ -43,24 +43,24 @@ ColumnLayout {
                 description:    qsTr("placeholder")
                 param:          "CT_KP_XY"
                 min:            0
-                max:            2
-                step:           0.05
+                max:            30
+                step:           0.01
             }
             ListElement {
                 title:          qsTr("Integral gain (KI_XY)")
                 description:    qsTr("placeholder")
                 param:          "CT_KI_XY"
                 min:            0
-                max:            2
-                step:           0.05
+                max:            30
+                step:           0.01
             }
             ListElement {
-                title:          qsTr("Derivative gain (KP_XY)")
+                title:          qsTr("Derivative gain (KD_XY)")
                 description:    qsTr("placeholder")
                 param:          "CT_KD_XY"
                 min:            0
-                max:            2
-                step:           0.05
+                max:            30
+                step:           0.01
             }
             }
         }
@@ -76,7 +76,7 @@ ColumnLayout {
                 description:    qsTr("placeholder")
                 param:          "CT_KP_Z"
                 min:            0
-                max:            2
+                max:            30
                 step:           0.01
             }
             ListElement {
@@ -84,7 +84,7 @@ ColumnLayout {
                 description:    qsTr("placeholder")
                 param:          "CT_KI_Z"
                 min:            0
-                max:            2
+                max:            30
                 step:           0.01
             }
             ListElement {
@@ -92,7 +92,7 @@ ColumnLayout {
                 description:    qsTr("placeholder")
                 param:          "CT_KD_Z"
                 min:            0
-                max:            2
+                max:            30
                 step:           0.01
             }
             }
@@ -107,17 +107,35 @@ ColumnLayout {
         }
         ColumnLayout {
         QGCButton {
+        id: stepButton
         text:       qsTr("Step")
         enabled: false
-        onClicked: globals.activeVehicle.guidedModeChangeAltitude(0, false);
+        onClicked: globals.activeVehicle.guidedModeChangeAltitude(nextAlt(), false);
+        function nextAlt() {
+            var dh = 0
+            if(globals.activeVehicle.localPositionSetpoint.z.value > -1.0) {
+                dh = 0.5  // Climb 0.5m
+            } else {
+                dh = -0.5 // Descend 0.5m
+            }
+            return dh
+        }
         }
         QGCButton {
         text:       qsTr("Takeoff")
-        onClicked:  globals.activeVehicle.guidedModeTakeoff(0)
+        onClicked:  doTakeoff()
+        function doTakeoff() {
+            stepButton.enabled = true
+            globals.activeVehicle.guidedModeTakeoff(0)
+        }
         }
         QGCButton {
         text:       qsTr("Land")
-        onClicked: globals.activeVehicle.guidedModeLand()
+        onClicked: doLand()
+        function doLand() {
+            stepButton.enabled = false
+            globals.activeVehicle.guidedModeLand()
+        }
         }
         }
     }
