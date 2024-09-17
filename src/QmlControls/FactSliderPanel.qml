@@ -142,7 +142,6 @@ Column {
                                     if (x < minX) x = minX
                                     var maxX = rightValueLabel.x - _margins/2 - width
                                     if (x > maxX) x = maxX
-                                    console.log("right: ", rightValueLabel.x, " x: ", x);
                                     return x
                                 }
                             }

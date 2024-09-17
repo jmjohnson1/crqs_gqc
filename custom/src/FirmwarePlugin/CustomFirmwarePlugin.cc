@@ -163,14 +163,14 @@ void CustomFirmwarePlugin::startMission(Vehicle* vehicle) {
 }
 
 void CustomFirmwarePlugin::guidedModeChangeAltitude(Vehicle* vehicle, double altitudeChange, bool pauseVehicle) {
-    VehicleLocalPositionFactGroup *localPosFactGroup;
-    localPosFactGroup = (VehicleLocalPositionFactGroup*)vehicle->localPositionFactGroup();
+    VehicleLocalPositionSetpointFactGroup *localPosSPFactGroup;
+    localPosSPFactGroup = (VehicleLocalPositionSetpointFactGroup*)vehicle->localPositionSetpointFactGroup();
     qDebug() << "rawVal: ";
-    qDebug() << localPosFactGroup->z()->rawValue().toDouble();
+    qDebug() << localPosSPFactGroup->z()->rawValue().toDouble();
     qDebug() << "cookedVal: ";
-    qDebug() << localPosFactGroup->z()->cookedValue().toDouble();
+    qDebug() << localPosSPFactGroup->z()->cookedValue().toDouble();
 
-    float currentAlt = -localPosFactGroup->z()->rawValue().toFloat();
+    float currentAlt = -localPosSPFactGroup->z()->rawValue().toFloat();
     float newAlt = currentAlt + altitudeChange;
 
     // Send the change altitude command
@@ -178,7 +178,7 @@ void CustomFirmwarePlugin::guidedModeChangeAltitude(Vehicle* vehicle, double alt
         vehicle->defaultComponentId(),
         MAV_CMD_DO_CHANGE_ALTITUDE,
         MAV_FRAME_LOCAL_NED,
-        true,
+        false,
         newAlt,
         MAV_FRAME_LOCAL_NED,
         NAN,

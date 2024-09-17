@@ -39,24 +39,24 @@ ColumnLayout {
                     description:    qsTr("I could include a description here. Maybe at some point. Right now, can't be bothered.")
                     param:          "CT_KP_ROLL"
                     min:            0
-                    max:            10
-                    step:           0.5
+                    max:            5
+                    step:           0.1
                 }
                 ListElement {
                     title:          qsTr("Integral Gain (KI_ROLL)")
                     description:    qsTr("I could include a description here. Maybe at some point. Right now, can't be bothered.")
                     param:          "CT_KI_ROLL"
                     min:            0
-                    max:            10
-                    step:           0.5
+                    max:            6
+                    step:           0.1
                 }
                 ListElement {
                     title:          qsTr("Derivative Gain (KD_ROLL)")
                     description:    qsTr("I could include a description here. Maybe at some point. Right now, can't be bothered.")
                     param:          "CT_KD_ROLL"
                     min:            0
-                    max:            10
-                    step:           0.5
+                    max:            1
+                    step:           0.01
                 }
             }
         }
@@ -72,24 +72,24 @@ ColumnLayout {
                     description:    qsTr("I could include a description here. Maybe at some point. Right now, can't be bothered.")
                     param:          "CT_KP_PITCH"
                     min:            0
-                    max:            10
-                    step:           0.5
+                    max:            5
+                    step:           0.1
                 }
                 ListElement {
                     title:          qsTr("Integral Gain (KI_PITCH)")
                     description:    qsTr("I could include a description here. Maybe at some point. Right now, can't be bothered.")
                     param:          "CT_KI_PITCH"
                     min:            0
-                    max:            10
-                    step:           0.5
+                    max:            6
+                    step:           0.1
                 }
                 ListElement {
                     title:          qsTr("Derivative Gain (KD_PITCH)")
                     description:    qsTr("I could include a description here. Maybe at some point. Right now, can't be bothered.")
                     param:          "CT_KD_PITCH"
                     min:            0
-                    max:            10
-                    step:           0.5
+                    max:            1
+                    step:           0.01
                 }
             }
         }
@@ -105,24 +105,24 @@ ColumnLayout {
                     description:    qsTr("I could include a description here. Maybe at some point. Right now, can't be bothered.")
                     param:          "CT_KP_YAW"
                     min:            0
-                    max:            5
-                    step:           0.5
+                    max:            0.5
+                    step:           0.01
                 }
                 ListElement {
                     title:          qsTr("Integral Gain (KI_YAW)")
                     description:    qsTr("I could include a description here. Maybe at some point. Right now, can't be bothered.")
                     param:          "CT_KI_YAW"
                     min:            0
-                    max:            5
-                    step:           0.5
+                    max:            0.2
+                    step:           0.01
                 }
                 ListElement {
                     title:          qsTr("Derivative Gain (KD_YAW)")
                     description:    qsTr("I could include a description here. Maybe at some point. Right now, can't be bothered.")
                     param:          "CT_KD_YAW"
                     min:            0
-                    max:            5
-                    step:           0.5
+                    max:            0.5
+                    step:           0.01
                 }
             }
         }
