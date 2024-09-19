@@ -9,8 +9,9 @@
 
 
 #include "CustomTuningComponent.h"
-#include "PX4AutoPilotPlugin.h"
-#include "AirframeComponent.h"
+#include "QGCMAVLink.h"
+#include "Vehicle.h"
+
 
 CustomTuningComponent::CustomTuningComponent(Vehicle* vehicle, AutoPilotPlugin* autopilot, QObject* parent)
     : VehicleComponent(vehicle, autopilot, parent)
