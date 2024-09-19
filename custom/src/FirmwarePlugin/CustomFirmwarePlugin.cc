@@ -11,7 +11,7 @@
  *
  */
 
-#include "CustomFirmwarePlugin.hpp"
+#include "CustomFirmwarePlugin.h"
 #include "CustomAutoPilotPlugin.h"
 #include "QGCApplication.h"
 
